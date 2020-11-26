@@ -26,7 +26,13 @@ DEALINGS IN THE SOFTWARE.  */
 #define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
 
+#ifdef HAVE_STRINGS
 #include <strings.h>
+#endif
+
+#ifdef HAVE_STRING
+#include <string.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

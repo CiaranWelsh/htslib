@@ -70,7 +70,13 @@ Andrew Whitwham, January 2019
 #include <stdlib.h>
 #include <string.h>
 #ifdef __MSYS__
+#ifdef HAVE_STRINGS
 #include <strings.h>
+#endif
+
+#ifdef HAVE_STRING
+#include <string.h>
+#endif
 #endif
 #include <errno.h>
 #include <pthread.h>

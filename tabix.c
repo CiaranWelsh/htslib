@@ -30,7 +30,13 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#ifdef HAVE_STRINGS
 #include <strings.h>
+#endif
+
+#ifdef HAVE_STRING
+#include <string.h>
+#endif
 #include <getopt.h>
 #include <sys/types.h>
 #include "ssize_t_typedef.h"

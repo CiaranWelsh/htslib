@@ -24,7 +24,13 @@
 
 #define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
+#ifdef HAVE_STRINGS
 #include <strings.h>
+#endif
+
+#ifdef HAVE_STRING
+#include <string.h>
+#endif
 #include <assert.h>
 #include "htslib/hts.h"
 #include "htslib/kstring.h"

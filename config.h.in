@@ -131,4 +131,8 @@
 /* for port to windows. Added by Ciaran Welsh */
 #cmakedefine SSIZE_T
 
+/* on linux we have include strings while windows its string (no 's') */
+#cmakedefine HAVE_STRING
+#cmakedefine HAVE_STRINGS
+
 #endif //HTSLIB_CMAKE_CONFIG2_H_IN_H

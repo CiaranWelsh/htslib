@@ -26,7 +26,13 @@
 #include <config.h>
 
 #include <assert.h>
+#ifdef HAVE_STRINGS
 #include <strings.h>
+#endif
+
+#ifdef HAVE_STRING
+#include <string.h>
+#endif
 
 #include "bcf_sr_sort.h"
 #include "htslib/khash_str2int.h"

@@ -206,8 +206,12 @@ set(_XOPEN_SOURCE)
 
 # Added by Ciaran Welsh for windows
 
-## check to see if ssize_t exists. On linux yes, windows no.
+# check to see if ssize_t exists. On linux yes, windows no.
 check_type_size(ssize_t SSIZE_T LANGUAGE C)
+
+# on linux we have include strings while windows its string (no 's')
+check_include_file(string.h HAVE_STRING)
+check_include_file(strings.h HAVE_STRINGS)
 
 configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/config.h.in"

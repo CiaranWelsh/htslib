@@ -28,7 +28,13 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_STRINGS
 #include <strings.h>
+#endif
+
+#ifdef HAVE_STRING
+#include <string.h>
+#endif
 #include <errno.h>
 #include <pthread.h>
 #ifndef _WIN32
