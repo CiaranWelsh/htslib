@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <inttypes.h>
 #include <math.h>
 #include <assert.h>
-#include <unistd.h>
+#include "_unistd.h"
 
 // Suppress message for faidx_fetch_nseq(), which we're intentionally testing
 #include "htslib/hts_defs.h"

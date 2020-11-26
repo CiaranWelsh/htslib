@@ -39,7 +39,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <errno.h>
 #include <stdarg.h>
 #include <string.h>
-#include <unistd.h>
+#include "_unistd.h"
 
 #ifndef EPROTONOSUPPORT
 #define EPROTONOSUPPORT ENOSYS

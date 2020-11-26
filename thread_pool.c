@@ -36,7 +36,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <sys/time.h>
 #include <assert.h>
 #include <stdarg.h>
-#include <unistd.h>
+#include "_unistd.h"
 #include <limits.h>
 
 #include "thread_pool_internal.h"

@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <unistd.h>
+#include "_unistd.h"
 #include <stdarg.h>
 
 #include "../htslib/hts_log.h"

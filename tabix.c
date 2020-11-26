@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include "_unistd.h"
 #include <string.h>
 #ifdef HAVE_STRINGS
 #include <strings.h>

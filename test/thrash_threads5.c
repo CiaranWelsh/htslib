@@ -26,7 +26,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include "_unistd.h"
 
 #include "htslib/bgzf.h"
 #include "htslib/thread_pool.h"

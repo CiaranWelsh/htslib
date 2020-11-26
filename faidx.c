@@ -33,7 +33,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <inttypes.h>
 #include <errno.h>
 #include <limits.h>
-#include <unistd.h>
+#include "_unistd.h"
 #include <assert.h>
 
 #include "htslib/bgzf.h"

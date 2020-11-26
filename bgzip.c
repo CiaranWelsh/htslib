@@ -35,7 +35,7 @@
 #endif
 #include <stdio.h>
 #include <fcntl.h>
-#include <unistd.h>
+#include "_unistd.h"
 #include <errno.h>
 #include <stdarg.h>
 #include <getopt.h>

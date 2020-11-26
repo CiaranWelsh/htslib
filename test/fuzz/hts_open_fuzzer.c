@@ -30,7 +30,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
+#include "_unistd.h"
 
 #include "htslib/hfile.h"
 #include "htslib/hts.h"

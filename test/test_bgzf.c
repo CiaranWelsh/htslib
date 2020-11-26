@@ -35,7 +35,7 @@ DEALINGS IN THE SOFTWARE.
 #include <sys/stat.h>
 #include <inttypes.h>
 #include <fcntl.h>
-#include <unistd.h>
+#include "_unistd.h"
 
 #include "htslib/bgzf.h"
 #include "htslib/hfile.h"

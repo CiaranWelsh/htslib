@@ -267,6 +267,7 @@ set(
         "${CMAKE_CURRENT_SOURCE_DIR}/vcf_sweep.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/vcfutils.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/ssize_t_typedef.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/_unistd.h"
 )
 
 set(

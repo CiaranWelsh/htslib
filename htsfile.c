@@ -31,7 +31,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-#include <unistd.h>
+#include "_unistd.h"
 
 #include "htslib/hfile.h"
 #include "htslib/hts.h"

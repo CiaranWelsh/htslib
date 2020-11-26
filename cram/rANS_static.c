@@ -41,7 +41,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
+#include "_unistd.h"
 #include <assert.h>
 #include <string.h>
 #include <sys/time.h>

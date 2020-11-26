@@ -37,7 +37,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <string.h>
 #endif
 #include <stdlib.h>
-#include <unistd.h>
+#include "_unistd.h"
 #include <inttypes.h>
 #include <limits.h>
 #include <stdint.h>

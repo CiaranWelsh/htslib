@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <unistd.h>
+#include "_unistd.h"
 #include <assert.h>
 #include <pthread.h>
 #include <sys/types.h>
