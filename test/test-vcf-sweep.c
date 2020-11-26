@@ -26,7 +26,7 @@ DEALINGS IN THE SOFTWARE.  */
 
 #include <stdio.h>
 
-#include "../htslib/vcf_sweep.h"
+#include "htslib/vcf_sweep.h"
 
 int main(int argc, char **argv)
 {

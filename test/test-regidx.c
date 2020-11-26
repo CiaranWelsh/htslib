@@ -1,6 +1,6 @@
 /*  test/test-regidx.c -- Regions index test harness.
 
-    gcc -g -Wall -O0 -I. -I../htslib/ -L../htslib regidx.c -o test-regidx test-regidx.c -lhts
+    gcc -g -Wall -O0 -I. -Ihtslib/ -L../htslib regidx.c -o test-regidx test-regidx.c -lhts
 
     Copyright (C) 2014,2016,2018, 2020 Genome Research Ltd.
 
@@ -34,9 +34,9 @@
 #include <getopt.h>
 #include <time.h>
 
-#include "../htslib/kstring.h"
-#include "../htslib/regidx.h"
-#include "../htslib/hts_defs.h"
+#include "htslib/kstring.h"
+#include "htslib/regidx.h"
+#include "htslib/hts_defs.h"
 #include "../textutils_internal.h"
 
 static int verbose = 0;

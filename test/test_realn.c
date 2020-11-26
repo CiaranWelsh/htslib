@@ -31,9 +31,9 @@ DEALINGS IN THE SOFTWARE.  */
 #include <limits.h>
 #include <unistd.h>
 
-#include "../htslib/sam.h"
-#include "../htslib/hts.h"
-#include "../htslib/faidx.h"
+#include "htslib/sam.h"
+#include "htslib/hts.h"
+#include "htslib/faidx.h"
 
 void usage(const char *prog) {
     fprintf(stderr, "Usage: %s -i <in.sam> -o <out.sam> -f <ref.fa>\n", prog);

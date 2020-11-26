@@ -26,8 +26,8 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdio.h>
 #include <unistd.h>
 
-#include "../htslib/sam.h"
-#include "../htslib/vcf.h"
+#include "htslib/sam.h"
+#include "htslib/vcf.h"
 
 void HTS_NORETURN usage(FILE *fp) {
     fprintf(fp, "Usage: test_index [opts] in.{sam.gz,bam,cram}|in.{vcf.gz,bcf}\n\n");

@@ -29,7 +29,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdint.h>
 #include <inttypes.h>
 
-#include "../htslib/hts_endian.h"
+#include "htslib/hts_endian.h"
 
 typedef struct {
     uint8_t u8[2];

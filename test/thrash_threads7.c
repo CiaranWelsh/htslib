@@ -37,7 +37,7 @@ DEALINGS IN THE SOFTWARE.
 #include <sys/time.h>
 #include <errno.h>
 
-#include "../htslib/thread_pool.h"
+#include "htslib/thread_pool.h"
 
 
 void *job(void *v) {

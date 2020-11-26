@@ -28,8 +28,8 @@ DEALINGS IN THE SOFTWARE.
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "../htslib/bgzf.h"
-#include "../htslib/thread_pool.h"
+#include "htslib/bgzf.h"
+#include "htslib/thread_pool.h"
 
 #define N 1000
 int main(int argc, char *argv[]) {

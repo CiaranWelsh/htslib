@@ -29,7 +29,7 @@ DEALINGS IN THE SOFTWARE.
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "../htslib/bgzf.h"
+#include "htslib/bgzf.h"
 
 int main(int argc, char *argv[]) {
     if (argc <= 1) {

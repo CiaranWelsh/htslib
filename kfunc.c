@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
 static double lbinom(int n, int k)
 {
     if (k == 0 || n == k) return 0;
-    return lgamma(n+1) - lgamma(k+1) - lgamma(n-k+1);
+    return kf_lgamma(n+1) - kf_lgamma(k+1) - kf_lgamma(n-k+1);
 }
 
 // n11  n12  | n1_

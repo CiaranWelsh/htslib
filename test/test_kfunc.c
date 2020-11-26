@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../htslib/kfunc.h"
+#include "htslib/kfunc.h"
 
 int differ(double obs, double expected)
 {
