@@ -43,8 +43,7 @@ void hts_srand48(long seed);
 HTSLIB_EXPORT
 double hts_erand48(unsigned short xseed[3]);
 
-HTSLIB_EXPORT
-double hts_drand48(void);
+
 
 HTSLIB_EXPORT
 long hts_lrand48(void);
