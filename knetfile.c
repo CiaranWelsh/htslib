@@ -39,6 +39,8 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include "ssize_t_typedef.h"
+
 
 #ifndef _WIN32
 #include <netdb.h>

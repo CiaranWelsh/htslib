@@ -33,6 +33,8 @@ DEALINGS IN THE SOFTWARE.  */
 #include <strings.h>
 #include <getopt.h>
 #include <sys/types.h>
+#include "ssize_t_typedef.h"
+
 #include <sys/stat.h>
 #include <errno.h>
 #include "htslib/tbx.h"

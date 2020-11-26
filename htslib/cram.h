@@ -38,6 +38,8 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdarg.h>
 #include <stdint.h>
 #include <sys/types.h>
+#include "ssize_t_typedef.h"
+
 
 #include "hts_defs.h"
 #include "hts.h"

@@ -49,6 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <pthread.h>
 #include <stdint.h>
 #include <sys/types.h>
+#include "ssize_t_typedef.h"
+
 
 #include "../htslib/thread_pool.h"
 #include "../htslib/cram.h"

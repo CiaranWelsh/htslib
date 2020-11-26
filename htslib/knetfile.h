@@ -30,6 +30,8 @@
 #include <stdint.h>
 #include <fcntl.h>
 #include <sys/types.h>
+#include "ssize_t_typedef.h"
+
 
 #include "hts_defs.h"
 

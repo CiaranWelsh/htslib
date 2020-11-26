@@ -71,6 +71,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <limits.h>
 #include <errno.h>
 #include <sys/types.h>
+#include "ssize_t_typedef.h"
+
 #include <sys/stat.h>
 
 #include "os.h"

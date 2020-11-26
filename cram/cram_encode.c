@@ -39,6 +39,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <strings.h>
 #include <zlib.h>
 #include <sys/types.h>
+#include "ssize_t_typedef.h"
+
 #include <sys/stat.h>
 #include <math.h>
 #include <inttypes.h>
