@@ -23,7 +23,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.  */
 
-#define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
 
 #ifdef HAVE_STRINGS
@@ -44,7 +43,8 @@ DEALINGS IN THE SOFTWARE.  */
 #include "_unistd.h"
 
 // Suppress deprecation message for cigar_tab, which we initialise
-#include "htslib/hts_defs.h"
+#include "hts_export.h"
+#include "hts_defs.h"
 #undef HTS_DEPRECATED
 #define HTS_DEPRECATED(message)
 
@@ -71,7 +71,7 @@ KHASH_DECLARE(s2i, kh_cstr_t, int64_t)
  *** BAM header I/O ***
  **********************/
 
-HTSLIB_EXPORT
+
 const int8_t bam_cigar_table[256] = {
     // 0 .. 47
     -1, -1, -1, -1,  -1, -1, -1, -1,  -1, -1, -1, -1,  -1, -1, -1, -1,

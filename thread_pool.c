@@ -23,8 +23,17 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.  */
 
 #ifndef TEST_MAIN
-#define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
+#endif
+
+#ifdef WIN32
+#   include "_time.h"
+#else
+#ifdef WIN32
+#   include "_time.h"
+#else
+#include <sys/time.h>
+#endif
 #endif
 
 #include <stdlib.h>
@@ -33,7 +42,6 @@ DEALINGS IN THE SOFTWARE.  */
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/time.h>
 #include <assert.h>
 #include <stdarg.h>
 #include "_unistd.h"

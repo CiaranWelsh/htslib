@@ -350,21 +350,37 @@ if("${OpenSSL_FOUND}")
 endif()
 
 message(STATUS "Found link targets: ${LINK_TARGETS}")
-
+# make static library
 target_link_libraries(hts-static PUBLIC ${LINK_TARGETS})
+
 target_include_directories(hts-static PUBLIC ${INCLUDE_DIRECTORIES})
+
+target_compile_definitions(hts-static PUBLIC HTS_STATIC_DEFINE)
+
+# shared library
 add_library(hts SHARED hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
-target_include_directories(hts PUBLIC
-        $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
+
+target_include_directories(hts PUBLIC $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
+
 target_link_libraries(hts PUBLIC $<TARGET_PROPERTY:hts-static,LINK_LIBRARIES>)
-set_target_properties(hts PROPERTIES
-    SOVERSION ${PROJECT_VERSION}
-)
+
+set_target_properties(hts PROPERTIES SOVERSION ${PROJECT_VERSION})
+
+target_compile_definitions(hts PUBLIC hts_EXPORTS)
+
+include(GenerateExportHeader)
+generate_export_header(hts)
+
 install(TARGETS hts hts-static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT htslib)
 install(DIRECTORY htslib DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT htslib)
 install(FILES bgzip.1 htsfile.1 tabix.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 COMPONENT htslib)
 install(FILES faidx.5 sam.5 vcf.5 DESTINATION ${CMAKE_INSTALL_MANDIR}/man5 COMPONENT htslib)
 install(FILES  htslib-s3-plugin.7 DESTINATION ${CMAKE_INSTALL_MANDIR}/man7 COMPONENT htslib)
+
+
+##########################################################################################
+#       Executables
+#
 
 set(BGZIP_SOURCES bgzip.c bgzf.c htslib/bgzf.h htslib/hts.h)
 set(HTSFILE_SOURCES htsfile.c htslib/hts.h htslib/sam.h htslib/vcf.h)

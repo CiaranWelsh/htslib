@@ -35,6 +35,7 @@
 #include "_unistd.h"
 
 
+#include "hts_export.h"
 #include "hts_defs.h"
 
 #ifdef __cplusplus
@@ -101,7 +102,7 @@ typedef struct BGZF BGZF;
      *              outputs uncompressed data wrapped in the zlib format.
      * @return      BGZF file handler; 0 on error
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     BGZF* bgzf_dopen(int fd, const char *mode);
 
     #define bgzf_fdopen(fd, mode) bgzf_dopen((fd), (mode)) // for backward compatibility
@@ -109,13 +110,13 @@ typedef struct BGZF BGZF;
     /**
      * Open the specified file for reading or writing.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     BGZF* bgzf_open(const char* path, const char *mode);
 
     /**
      * Open an existing hFILE stream for reading or writing.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     BGZF* bgzf_hopen(struct hFILE *fp, const char *mode);
 
     /**
@@ -124,7 +125,7 @@ typedef struct BGZF BGZF;
      * @param fp    BGZF file handler
      * @return      0 on success and -1 on error
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_close(BGZF *fp);
 
     /**
@@ -135,8 +136,8 @@ typedef struct BGZF BGZF;
      * @param length size of data to read
      * @return       number of bytes actually read; 0 on end-of-file and -1 on error
      */
-    HTSLIB_EXPORT
-    ssize_t bgzf_read(BGZF *fp, void *data, size_t length) HTS_RESULT_USED;
+    HTS_EXPORT
+    ssize_t bgzf_read(BGZF *fp, void *data, size_t length) ;
 
     /**
      * Write _length_ bytes from _data_ to the file.  If no I/O errors occur,
@@ -147,8 +148,8 @@ typedef struct BGZF BGZF;
      * @param length size of data to write
      * @return       number of bytes written (i.e., _length_); negative on error
      */
-    HTSLIB_EXPORT
-    ssize_t bgzf_write(BGZF *fp, const void *data, size_t length) HTS_RESULT_USED;
+    HTS_EXPORT
+    ssize_t bgzf_write(BGZF *fp, const void *data, size_t length) ;
 
     /**
      * Write _length_ bytes from _data_ to the file, the index will be used to
@@ -160,7 +161,7 @@ typedef struct BGZF BGZF;
      * @param length size of data to write
      * @return       number of bytes written (i.e., _length_); negative on error
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     ssize_t bgzf_block_write(BGZF *fp, const void *data, size_t length);
 
     /**
@@ -170,7 +171,7 @@ typedef struct BGZF BGZF;
      *               -2 on error,
      *               otherwise the unsigned byte value.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_peek(BGZF *fp);
 
     /**
@@ -183,8 +184,8 @@ typedef struct BGZF BGZF;
      * @param length number of raw bytes to read
      * @return       number of bytes actually read; 0 on end-of-file and -1 on error
      */
-    HTSLIB_EXPORT
-    ssize_t bgzf_raw_read(BGZF *fp, void *data, size_t length) HTS_RESULT_USED;
+    HTS_EXPORT
+    ssize_t bgzf_raw_read(BGZF *fp, void *data, size_t length) ;
 
     /**
      * Write _length_ bytes directly to the underlying stream without
@@ -196,8 +197,8 @@ typedef struct BGZF BGZF;
      * @param length number of raw bytes to write
      * @return       number of bytes actually written; -1 on error
      */
-    HTSLIB_EXPORT
-    ssize_t bgzf_raw_write(BGZF *fp, const void *data, size_t length) HTS_RESULT_USED;
+    HTS_EXPORT
+    ssize_t bgzf_raw_write(BGZF *fp, const void *data, size_t length) ;
 
     /**
      * Write the data in the buffer to the file.
@@ -205,8 +206,8 @@ typedef struct BGZF BGZF;
      * @param fp     BGZF file handle
      * @return       0 on success and -1 on error
      */
-    HTSLIB_EXPORT
-    int bgzf_flush(BGZF *fp) HTS_RESULT_USED;
+    HTS_EXPORT
+    int bgzf_flush(BGZF *fp) ;
 
     /**
      * Return a virtual file pointer to the current location in the file.
@@ -227,8 +228,8 @@ typedef struct BGZF BGZF;
      * @note It is not permitted to seek on files open for writing,
      * or files compressed with gzip (as opposed to bgzip).
      */
-    HTSLIB_EXPORT
-    int64_t bgzf_seek(BGZF *fp, int64_t pos, int whence) HTS_RESULT_USED;
+    HTS_EXPORT
+    int64_t bgzf_seek(BGZF *fp, int64_t pos, int whence) ;
 
     /**
      * Check if the BGZF end-of-file (EOF) marker is present
@@ -239,7 +240,7 @@ typedef struct BGZF BGZF;
      *              0 if the EOF marker is absent;
      *              -1 (with errno set) on error
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_check_EOF(BGZF *fp);
 
     /** Return the file's compression format
@@ -252,7 +253,7 @@ typedef struct BGZF BGZF;
      *   - 2 / `bgzf` if the file is BGZF-compressed
      * @since 1.4
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_compression(BGZF *fp);
 
     /**
@@ -261,9 +262,9 @@ typedef struct BGZF BGZF;
      * @param fn    file name
      * @return      1 if _fn_ is BGZF; 0 if not or on I/O error
      */
-    HTSLIB_EXPORT
-    int bgzf_is_bgzf(const char *fn) HTS_DEPRECATED("Use bgzf_compression() or hts_detect_format() instead");
-
+    //HTS_DEPRECATED (Use bgzf_compression() or hts_detect_format() instead );
+    HTS_EXPORT
+    int bgzf_is_bgzf(const char *fn) ;
     /*********************
      * Advanced routines *
      *********************/
@@ -274,22 +275,22 @@ typedef struct BGZF BGZF;
      * @param fp    BGZF file handler
      * @param size  size of cache in bytes; 0 to disable caching (default)
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bgzf_set_cache_size(BGZF *fp, int size);
 
     /**
      * Flush the file if the remaining buffer size is smaller than _size_
      * @return      0 if flushing succeeded or was not needed; negative on error
      */
-    HTSLIB_EXPORT
-    int bgzf_flush_try(BGZF *fp, ssize_t size) HTS_RESULT_USED;
+    HTS_EXPORT
+    int bgzf_flush_try(BGZF *fp, ssize_t size) ;
 
     /**
      * Read one byte from a BGZF file. It is faster than bgzf_read()
      * @param fp     BGZF file handler
      * @return       byte read; -1 on end-of-file or error
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_getc(BGZF *fp);
 
     /**
@@ -300,14 +301,14 @@ typedef struct BGZF BGZF;
      * @param str    string to write to; must be initialized
      * @return       length of the string; -1 on end-of-file; <= -2 on error
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_getline(BGZF *fp, int delim, struct kstring_t *str);
 
     /**
      * Read the next BGZF block.
      */
-    HTSLIB_EXPORT
-    int bgzf_read_block(BGZF *fp) HTS_RESULT_USED;
+    HTS_EXPORT
+    int bgzf_read_block(BGZF *fp) ;
 
     /**
      * Enable multi-threading (when compiled with -DBGZF_MT) via a shared
@@ -317,7 +318,7 @@ typedef struct BGZF BGZF;
      * @param fp          BGZF file handler; must be opened for writing
      * @param pool        The thread pool (see hts_create_threads)
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_thread_pool(BGZF *fp, struct hts_tpool *pool, int qsize);
 
     /**
@@ -328,7 +329,7 @@ typedef struct BGZF BGZF;
      * @param n_threads   #threads used for writing
      * @param n_sub_blks  #blocks processed by each thread; a value 64-256 is recommended
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_mt(BGZF *fp, int n_threads, int n_sub_blks);
 
     /**
@@ -342,7 +343,7 @@ typedef struct BGZF BGZF;
      * @param level  compression level
      * @return       0 on success and negative on error
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_compress(void *dst, size_t *dlen, const void *src, size_t slen, int level);
 
     /*******************
@@ -361,8 +362,8 @@ typedef struct BGZF BGZF;
      *  @note It is not permitted to seek on files open for writing,
      *  or files compressed with gzip (as opposed to bgzip).
      */
-    HTSLIB_EXPORT
-    int bgzf_useek(BGZF *fp, off_t uoffset, int where) HTS_RESULT_USED;
+    HTS_EXPORT
+    int bgzf_useek(BGZF *fp, off_t uoffset, int where) ;
 
     /**
      *  Position in uncompressed BGZF
@@ -371,7 +372,7 @@ typedef struct BGZF BGZF;
      *
      *  Returns the current offset on success and -1 on error.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     off_t bgzf_utell(BGZF *fp);
 
     /**
@@ -386,7 +387,7 @@ typedef struct BGZF BGZF;
      * file handle (as threads may start reading data before the index
      * has been set up).
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_index_build_init(BGZF *fp);
 
     /// Load BGZF index
@@ -396,9 +397,9 @@ typedef struct BGZF BGZF;
      * @param suffix      suffix to add to bname (can be NULL)
      * @return 0 on success and -1 on error.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_index_load(BGZF *fp,
-                        const char *bname, const char *suffix) HTS_RESULT_USED;
+                        const char *bname, const char *suffix) ;
 
     /// Load BGZF index from an hFILE
     /**
@@ -415,9 +416,9 @@ typedef struct BGZF BGZF;
      * is only used for printing error messages; if NULL the word "index" is
      * used instead.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_index_load_hfile(BGZF *fp, struct hFILE *idx,
-                              const char *name) HTS_RESULT_USED;
+                              const char *name) ;
 
     /// Save BGZF index
     /**
@@ -426,9 +427,9 @@ typedef struct BGZF BGZF;
      * @param suffix      suffix to add to bname (can be NULL)
      * @return 0 on success and -1 on error.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_index_dump(BGZF *fp,
-                        const char *bname, const char *suffix) HTS_RESULT_USED;
+                        const char *bname, const char *suffix) ;
 
     /// Write a BGZF index to an hFILE
     /**
@@ -444,9 +445,9 @@ typedef struct BGZF BGZF;
      * used instead.
      */
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bgzf_index_dump_hfile(BGZF *fp, struct hFILE *idx,
-                              const char *name) HTS_RESULT_USED;
+                              const char *name) ;
 
 #ifdef __cplusplus
 }

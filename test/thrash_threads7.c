@@ -34,7 +34,11 @@ DEALINGS IN THE SOFTWARE.
 #include <stdio.h>
 #include <stdlib.h>
 #include "_unistd.h"
+#ifdef WIN32
+#   include "_time.h"
+#else
 #include <sys/time.h>
+#endif
 #include <errno.h>
 
 #include "htslib/thread_pool.h"

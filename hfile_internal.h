@@ -27,7 +27,8 @@ DEALINGS IN THE SOFTWARE.  */
 
 #include <stdarg.h>
 
-#include "htslib/hts_defs.h"
+#include "hts_export.h"
+#include "hts_defs.h"
 #include "htslib/hfile.h"
 
 #include "textutils_internal.h"
@@ -66,36 +67,36 @@ struct hFILE_backend {
     /* As per read(2), returning the number of bytes read (possibly 0) or
        negative (and setting errno) on errors.  Front-end code will call this
        repeatedly if necessary to attempt to get the desired byte count.  */
-    ssize_t (*read)(hFILE *fp, void *buffer, size_t nbytes) HTS_RESULT_USED;
+    ssize_t (*read)(hFILE *fp, void *buffer, size_t nbytes) ;
 
     /* As per write(2), returning the number of bytes written or negative (and
        setting errno) on errors.  Front-end code will call this repeatedly if
        necessary until the desired block is written or an error occurs.  */
     ssize_t (*write)(hFILE *fp, const void *buffer, size_t nbytes)
-        HTS_RESULT_USED;
+        ;
 
     /* As per lseek(2), returning the resulting offset within the stream or
        negative (and setting errno) on errors.  */
-    off_t (*seek)(hFILE *fp, off_t offset, int whence) HTS_RESULT_USED;
+    off_t (*seek)(hFILE *fp, off_t offset, int whence) ;
 
     /* Performs low-level flushing, if any, e.g., fsync(2); for writing streams
        only.  Returns 0 for success or negative (and sets errno) on errors. */
-    int (*flush)(hFILE *fp) HTS_RESULT_USED;
+    int (*flush)(hFILE *fp) ;
 
     /* Closes the underlying stream (for output streams, the buffer will
        already have been flushed), returning 0 for success or negative (and
        setting errno) on errors, as per close(2).  */
-    int (*close)(hFILE *fp) HTS_RESULT_USED;
+    int (*close)(hFILE *fp) ;
 };
 
 /* May be called by hopen_*() functions to decode a fopen()-style mode into
    open(2)-style flags.  */
-HTSLIB_EXPORT int hfile_oflags(const char *mode);
+HTS_EXPORT int hfile_oflags(const char *mode);
 
 /* Must be called by hopen_*() functions to allocate the hFILE struct and set
    up its base.  Capacity is a suggested buffer size (e.g., via fstat(2))
    or 0 for a default-sized buffer.  */
-HTSLIB_EXPORT hFILE *hfile_init(size_t struct_size, const char *mode, size_t capacity);
+HTS_EXPORT hFILE *hfile_init(size_t struct_size, const char *mode, size_t capacity);
 
 /* Alternative to hfile_init() for in-memory backends for which the base
    buffer is the only storage.  Buffer is already allocated via malloc(2)
@@ -107,18 +108,18 @@ hFILE *hfile_init_fixed(size_t struct_size, const char *mode,
 /* May be called by hopen_*() functions to undo the effects of hfile_init()
    in the event opening the stream subsequently fails.  (This is safe to use
    even if fp is NULL.  This takes care to preserve errno.)  */
-HTSLIB_EXPORT void hfile_destroy(hFILE *fp);
+HTS_EXPORT void hfile_destroy(hFILE *fp);
 
 
 struct hFILE_scheme_handler {
     /* Opens a stream when dispatched by hopen(); should call hfile_init()
        to malloc a struct "derived" from hFILE and initialise it appropriately,
        including setting base.backend to its own backend vector.  */
-    hFILE *(*open)(const char *filename, const char *mode) HTS_RESULT_USED;
+    hFILE *(*open)(const char *filename, const char *mode) ;
 
     /* Returns whether the URL denotes remote storage when dispatched by
        hisremote().  For simple cases, use one of hfile_always_*() below.  */
-    int (*isremote)(const char *filename) HTS_RESULT_USED;
+    int (*isremote)(const char *filename) ;
 
     /* The name of the plugin or other code providing this handler.  */
     const char *provider;
@@ -134,7 +135,7 @@ struct hFILE_scheme_handler {
     /* Same as the open() method, used when extra arguments have been given
        to hopen().  */
     hFILE *(*vopen)(const char *filename, const char *mode, va_list args)
-        HTS_RESULT_USED;
+        ;
 };
 
 /* May be used as an isremote() function in simple cases.  */
@@ -142,7 +143,7 @@ extern int hfile_always_local (const char *fname);
 extern int hfile_always_remote(const char *fname);
 
 /* Should be called by plugins for each URL scheme they wish to handle.  */
-HTSLIB_EXPORT void hfile_add_scheme_handler(const char *scheme,
+HTS_EXPORT void hfile_add_scheme_handler(const char *scheme,
                               const struct hFILE_scheme_handler *handler);
 
 struct hFILE_plugin {
@@ -163,7 +164,7 @@ struct hFILE_plugin {
 #define PLUGIN_GLOBAL(identifier,suffix) identifier
 
 /* Plugins must define an entry point with this signature.  */
-HTSLIB_EXPORT
+HTS_EXPORT
 extern int hfile_plugin_init(struct hFILE_plugin *self);
 
 #else

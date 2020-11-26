@@ -23,7 +23,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.  */
 
-#define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
 
 #include <zlib.h>
@@ -2050,19 +2049,19 @@ int hts_idx_fmt(hts_idx_t *idx) {
 // The optimizer eliminates these ed_is_big() calls; still it would be good to
 // TODO Determine endianness at configure- or compile-time
 
-static inline ssize_t HTS_RESULT_USED idx_write_int32(BGZF *fp, int32_t x)
+static inline ssize_t  idx_write_int32(BGZF *fp, int32_t x)
 {
     if (ed_is_big()) x = ed_swap_4(x);
     return bgzf_write(fp, &x, sizeof x);
 }
 
-static inline ssize_t HTS_RESULT_USED idx_write_uint32(BGZF *fp, uint32_t x)
+static inline ssize_t  idx_write_uint32(BGZF *fp, uint32_t x)
 {
     if (ed_is_big()) x = ed_swap_4(x);
     return bgzf_write(fp, &x, sizeof x);
 }
 
-static inline ssize_t HTS_RESULT_USED idx_write_uint64(BGZF *fp, uint64_t x)
+static inline ssize_t  idx_write_uint64(BGZF *fp, uint64_t x)
 {
     if (ed_is_big()) x = ed_swap_8(x);
     return bgzf_write(fp, &x, sizeof x);
@@ -4103,7 +4102,7 @@ hts_idx_t *hts_idx_load3(const char *fn, const char *fnidx, int fmt, int flags)
  **********************/
 
 /* For use with hts_expand macros *only* */
-HTSLIB_EXPORT
+HTS_EXPORT
 size_t hts_realloc_or_die(size_t n, size_t m, size_t m_sz, size_t size,
                           int clear, void **ptr, const char *func) {
     /* If new_m and size are both below this limit, multiplying them

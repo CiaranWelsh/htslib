@@ -29,6 +29,7 @@ SOFTWARE.
 #ifndef HTS_LOG_H
 #define HTS_LOG_H
 
+#include "hts_export.h"
 #include "hts_defs.h"
 
 #ifdef __cplusplus
@@ -46,11 +47,11 @@ enum htsLogLevel {
 };
 
 /// Sets the selected log level.
-HTSLIB_EXPORT
+HTS_EXPORT
 void hts_set_log_level(enum htsLogLevel level);
 
 /// Gets the selected log level.
-HTSLIB_EXPORT
+HTS_EXPORT
 enum htsLogLevel hts_get_log_level(void);
 
 /// Selected log level.
@@ -58,7 +59,7 @@ enum htsLogLevel hts_get_log_level(void);
  * One of the HTS_LOG_* values. The default is HTS_LOG_WARNING.
  * \note Avoid direct use of this variable. Use hts_set_log_level and hts_get_log_level instead.
  */
-HTSLIB_EXPORT extern int hts_verbose;
+HTS_EXPORT extern int hts_verbose;
 
 /*! Logs an event.
 * \param severity      Severity of the event:
@@ -70,7 +71,7 @@ HTSLIB_EXPORT extern int hts_verbose;
 * \param context       Context where the event occurred. Typically set to "__func__".
 * \param format        Format string with placeholders, like printf.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 void hts_log(enum htsLogLevel severity, const char *context, const char *format, ...)
 HTS_FORMAT(HTS_PRINTF_FMT, 3, 4);
 

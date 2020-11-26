@@ -26,6 +26,7 @@ DEALINGS IN THE SOFTWARE.  */
 #ifndef HTSLIB_HTS_OS_H
 #define HTSLIB_HTS_OS_H
 
+#include "hts_export.h"
 #include "hts_defs.h"
 
 #ifdef __cplusplus
@@ -37,15 +38,15 @@ extern "C" {
    Hence calling hts_srand48() will always set up the same POSIX-determined
    sequence of pseudo-random numbers on any platform, while calling srand48()
    may (e.g., on OpenBSD) set up a different non-deterministic sequence. */
-HTSLIB_EXPORT
+HTS_EXPORT
 void hts_srand48(long seed);
 
-HTSLIB_EXPORT
+HTS_EXPORT
 double hts_erand48(unsigned short xseed[3]);
 
 
 
-HTSLIB_EXPORT
+HTS_EXPORT
 long hts_lrand48(void);
 
 #if defined(_WIN32) && !defined(__CYGWIN__)

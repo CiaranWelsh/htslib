@@ -157,7 +157,7 @@ These are compiler, configuration and makefile based changes.
   failures on machines that already had a system-installed HTSlib.  Thanks to
   John Marshall. (#1078; fixed #347)
 
-* Define HTSLIB_EXPORT without using a helper macro to reduce the length of
+* Define HTS_EXPORT without using a helper macro to reduce the length of
   compiler diagnostics that mention exported functions.  Thanks to
   John Marshall. (#1029)
 

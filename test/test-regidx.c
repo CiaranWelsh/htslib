@@ -36,7 +36,8 @@
 
 #include "htslib/kstring.h"
 #include "htslib/regidx.h"
-#include "htslib/hts_defs.h"
+#include "hts_export.h"
+#include "hts_defs.h"
 #include "../textutils_internal.h"
 
 static int verbose = 0;

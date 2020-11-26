@@ -73,7 +73,8 @@ typedef struct sam_hdr_t {
     int32_t n_targets, ignore_sam_err;
     size_t l_text;
     uint32_t *target_len;
-    const int8_t *cigar_tab HTS_DEPRECATED("Use bam_cigar_table[] instead");
+//    HTS_DEPRECATED//("Use bam_cigar_table[] instead")
+    const int8_t *cigar_tab ;
     char **target_name;
     char *text;
     void *sdict;
@@ -110,7 +111,7 @@ typedef sam_hdr_t bam_hdr_t;
 Result is operator code or -1. Be sure to cast the index if it is a plain char:
     int op = bam_cigar_table[(unsigned char) ch];
 */
-extern const int8_t bam_cigar_table[256];
+HTS_EXPORT extern const int8_t bam_cigar_table[256];
 
 #define bam_cigar_op(c) ((c)&BAM_CIGAR_MASK)
 #define bam_cigar_oplen(c) ((c)>>BAM_CIGAR_SHIFT)
@@ -340,7 +341,7 @@ typedef struct bam1_t {
  * The sam_hdr_t struct returned by a successful call should be freed
  * via sam_hdr_destroy() when it is no longer needed.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 sam_hdr_t *sam_hdr_init(void);
 
 /// Read the header from a BAM compressed file.
@@ -354,7 +355,7 @@ sam_hdr_t *sam_hdr_init(void);
  * The sam_hdr_t struct returned by a successful call should be freed
  * via sam_hdr_destroy() when it is no longer needed.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 sam_hdr_t *bam_hdr_read(BGZF *fp);
 
 /// Writes the header to a BAM file.
@@ -366,13 +367,13 @@ sam_hdr_t *bam_hdr_read(BGZF *fp);
  * This function only works with BAM files.  Use sam_hdr_write() to
  * write in any of the SAM, BAM or CRAM formats.
  */
-HTSLIB_EXPORT
-int bam_hdr_write(BGZF *fp, const sam_hdr_t *h) HTS_RESULT_USED;
+HTS_EXPORT
+int bam_hdr_write(BGZF *fp, const sam_hdr_t *h) ;
 
 /*!
  * Frees the resources associated with a header.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 void sam_hdr_destroy(sam_hdr_t *h);
 
 /// Duplicate a header structure.
@@ -382,7 +383,7 @@ void sam_hdr_destroy(sam_hdr_t *h);
  * The sam_hdr_t struct returned by a successful call should be freed
  * via sam_hdr_destroy() when it is no longer needed.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 sam_hdr_t *sam_hdr_dup(const sam_hdr_t *h0);
 
 /*!
@@ -405,7 +406,7 @@ typedef htsFile samFile;
  * The sam_hdr_t struct returned by a successful call should be freed
  * via sam_hdr_destroy() when it is no longer needed.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 sam_hdr_t *sam_hdr_parse(size_t l_text, const char *text);
 
 /// Read a header from a SAM, BAM or CRAM file.
@@ -416,7 +417,7 @@ sam_hdr_t *sam_hdr_parse(size_t l_text, const char *text);
  * The sam_hdr_t struct returned by a successful call should be freed
  * via sam_hdr_destroy() when it is no longer needed.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 sam_hdr_t *sam_hdr_read(samFile *fp);
 
 /// Write a header to a SAM, BAM or CRAM file.
@@ -425,14 +426,14 @@ sam_hdr_t *sam_hdr_read(samFile *fp);
  * @param h     Header structure to write
  * @return  0 on success; -1 on failure
  */
-HTSLIB_EXPORT
-int sam_hdr_write(samFile *fp, const sam_hdr_t *h) HTS_RESULT_USED;
+HTS_EXPORT
+int sam_hdr_write(samFile *fp, const sam_hdr_t *h) ;
 
 /// Returns the current length of the header text.
 /*!
  * @return  >= 0 on success, SIZE_MAX on failure
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 size_t sam_hdr_length(sam_hdr_t *h);
 
 /// Returns the text representation of the header.
@@ -445,14 +446,14 @@ size_t sam_hdr_length(sam_hdr_t *h);
  *
  * The caller should not attempt to free or realloc this pointer.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 const char *sam_hdr_str(sam_hdr_t *h);
 
 /// Returns the number of references in the header.
 /*!
  * @return  >= 0 on success, -1 on failure
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_nref(const sam_hdr_t *h);
 
 /* ==== Line level methods ==== */
@@ -470,7 +471,7 @@ int sam_hdr_nref(const sam_hdr_t *h);
  * The lines will be appended to the end of the existing header
  * (apart from HD, which always comes first).
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_add_lines(sam_hdr_t *h, const char *lines, size_t len);
 
 /// Adds a single line to an existing header.
@@ -486,7 +487,7 @@ int sam_hdr_add_lines(sam_hdr_t *h, const char *lines, size_t len);
  * given type currently exist.  The exception is HD lines, which always
  * come first.  If an HD line already exists, it will be replaced.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_add_line(sam_hdr_t *h, const char *type, ...);
 
 /// Returns a complete line of formatted text for a given type and ID.
@@ -505,7 +506,7 @@ int sam_hdr_add_line(sam_hdr_t *h, const char *type, ...);
  *
  * Any existing content in @p ks will be overwritten.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_find_line_id(sam_hdr_t *h, const char *type,
                       const char *ID_key, const char *ID_val, kstring_t *ks);
 
@@ -523,7 +524,7 @@ int sam_hdr_find_line_id(sam_hdr_t *h, const char *type,
  *
  * Any existing content in @p ks will be overwritten.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_find_line_pos(sam_hdr_t *h, const char *type,
                           int pos, kstring_t *ks);
 
@@ -548,7 +549,7 @@ int sam_hdr_find_line_pos(sam_hdr_t *h, const char *type,
  *
  * @note Removing \@PG lines is currently unsupported.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_remove_line_id(sam_hdr_t *h, const char *type, const char *ID_key, const char *ID_value);
 
 /// Remove nth line of a given type from a header
@@ -560,7 +561,7 @@ int sam_hdr_remove_line_id(sam_hdr_t *h, const char *type, const char *ID_key, c
  * Remove a line from the header by specifying the position in the type
  * group, i.e. 3rd @SQ line.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_remove_line_pos(sam_hdr_t *h, const char *type, int position);
 
 /// Add or update tag key,value pairs in a header line.
@@ -587,7 +588,7 @@ int sam_hdr_remove_line_pos(sam_hdr_t *h, const char *type, int position);
  *
  * Attempting to change an @PG ID tag is not permitted.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_update_line(sam_hdr_t *h, const char *type,
         const char *ID_key, const char *ID_value, ...);
 
@@ -604,7 +605,7 @@ int sam_hdr_update_line(sam_hdr_t *h, const char *type,
  * If no line matches the key:value ID, all lines of the given type are removed.
  * To remove all lines of a given type, use NULL for both ID_key and ID_value.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_remove_except(sam_hdr_t *h, const char *type, const char *ID_key, const char *ID_value);
 
 /// Remove header lines of a given type, except those in a given ID set
@@ -644,7 +645,7 @@ int sam_hdr_remove_except(sam_hdr_t *h, const char *type, const char *ID_key, co
  * @endcode
  *
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_remove_lines(sam_hdr_t *h, const char *type, const char *id, void *rh);
 
 /// Count the number of lines for a given header type
@@ -653,7 +654,7 @@ int sam_hdr_remove_lines(sam_hdr_t *h, const char *type, const char *id, void *r
  * @param type  Header type to count. Eg. "RG"
  * @return  Number of lines of this type on success; -1 on failure
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_count_lines(sam_hdr_t *h, const char *type);
 
 /// Index of the line for the types that have dedicated look-up tables (SQ, RG, PG)
@@ -663,7 +664,7 @@ int sam_hdr_count_lines(sam_hdr_t *h, const char *type);
  * @param key   The value of the identifying key. Eg. "rg1"
  * @return  0-based index on success; -1 if line does not exist; -2 on failure
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_line_index(sam_hdr_t *bh, const char *type, const char *key);
 
 /// Id key of the line for the types that have dedicated look-up tables (SQ, RG, PG)
@@ -673,7 +674,7 @@ int sam_hdr_line_index(sam_hdr_t *bh, const char *type, const char *key);
  * @param pos   Zero-based index inside the type group. Eg. 2 (for the third RG line)
  * @return  Valid key string on success; NULL on failure
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 const char *sam_hdr_line_name(sam_hdr_t *bh, const char *type, int pos);
 
 /* ==== Key:val level methods ==== */
@@ -694,7 +695,7 @@ const char *sam_hdr_line_name(sam_hdr_t *bh, const char *type, int pos);
  * and ID_value parameters.  Any pre-existing content in @p ks will be
  * overwritten.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_find_tag_id(sam_hdr_t *h, const char *type, const char *ID_key, const char *ID_value, const char *key, kstring_t *ks);
 
 /// Return the value associated with a key for a header line identified by position
@@ -712,7 +713,7 @@ int sam_hdr_find_tag_id(sam_hdr_t *h, const char *type, const char *ID_key, cons
  * and @p position parameters.  Any pre-existing content in @p ks will be
  * overwritten.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_find_tag_pos(sam_hdr_t *h, const char *type, int pos, const char *key, kstring_t *ks);
 
 /// Remove the key from the line identified by type, ID_key and ID_value.
@@ -723,7 +724,7 @@ int sam_hdr_find_tag_pos(sam_hdr_t *h, const char *type, int pos, const char *ke
  * @param key       Key of the targeted tag. Eg. "M5"
  * @return          1 if the key was removed; 0 if it was not present; -1 on error
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_remove_tag_id(sam_hdr_t *h, const char *type, const char *ID_key, const char *ID_value, const char *key);
 
 /// Get the target id for a given reference sequence name
@@ -736,7 +737,7 @@ int sam_hdr_remove_tag_id(sam_hdr_t *h, const char *type, const char *ID_key, co
  * Looks up a reference sequence by name in the reference hash table
  * and returns the numerical target id.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_name2tid(sam_hdr_t *h, const char *ref);
 
 /// Get the reference sequence name from a target index
@@ -747,7 +748,7 @@ int sam_hdr_name2tid(sam_hdr_t *h, const char *ref);
  * Fetch the reference sequence name from the target name array,
  * using the numerical target id.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 const char *sam_hdr_tid2name(const sam_hdr_t *h, int tid);
 
 /// Get the reference sequence length from a target index
@@ -758,7 +759,7 @@ const char *sam_hdr_tid2name(const sam_hdr_t *h, int tid);
  * Fetch the reference sequence length from the target length array,
  * using the numerical target id.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_pos_t sam_hdr_tid2len(const sam_hdr_t *h, int tid);
 
 /// Alias of sam_hdr_name2tid(), for backwards compatibility.
@@ -779,7 +780,7 @@ static inline int bam_name2id(sam_hdr_t *h, const char *ref) { return sam_hdr_na
  * valid until the next call to this function, or the header is destroyed.
  * The caller should not attempt to free() or realloc() it.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 const char *sam_hdr_pg_id(sam_hdr_t *h, const char *name);
 
 /// Add an \@PG line.
@@ -797,7 +798,7 @@ const char *sam_hdr_pg_id(sam_hdr_t *h, const char *name);
  * Call it as per sam_hdr_add_line() with a series of key,value pairs ending
  * in NULL.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_hdr_add_pg(sam_hdr_t *h, const char *name, ...);
 
 /*!
@@ -809,7 +810,7 @@ int sam_hdr_add_pg(sam_hdr_t *h, const char *name, ...);
  * Returns malloced char * on success;
  *         NULL on failure
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 char *stringify_argv(int argc, char *argv[]);
 
 /// Increments the reference count on a header
@@ -817,7 +818,7 @@ char *stringify_argv(int argc, char *argv[]);
  * This permits multiple files to share the same header, all calling
  * sam_hdr_destroy when done, without causing errors for other open files.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 void sam_hdr_incr_ref(sam_hdr_t *h);
 
 /*
@@ -842,7 +843,7 @@ void sam_hdr_incr_ref(sam_hdr_t *h);
    The bam1_t struct returned by a successful call should be freed
    via bam_destroy1() when it is no longer needed.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 bam1_t *bam_init1(void);
 
 /// Destroy a bam1_t structure
@@ -853,7 +854,7 @@ bam1_t *bam_init1(void);
    will be freed, along with the structure itself.  @p b should not be
    accessed after calling this function.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 void bam_destroy1(bam1_t *b);
 
 #define BAM_USER_OWNS_STRUCT 1
@@ -967,8 +968,8 @@ static inline uint32_t bam_get_mempolicy(bam1_t *b) {
    This function can only read BAM format files.  Most code should use
    sam_read1() instead, which can be used with BAM, SAM and CRAM formats.
 */
-HTSLIB_EXPORT
-int bam_read1(BGZF *fp, bam1_t *b) HTS_RESULT_USED;
+HTS_EXPORT
+int bam_read1(BGZF *fp, bam1_t *b) ;
 
 /// Write a BAM format alignment record
 /**
@@ -980,8 +981,8 @@ int bam_read1(BGZF *fp, bam1_t *b) HTS_RESULT_USED;
    This function can only write BAM format files.  Most code should use
    sam_write1() instead, which can be used with BAM, SAM and CRAM formats.
 */
-HTSLIB_EXPORT
-int bam_write1(BGZF *fp, const bam1_t *b) HTS_RESULT_USED;
+HTS_EXPORT
+int bam_write1(BGZF *fp, const bam1_t *b) ;
 
 /// Copy alignment record data
 /**
@@ -989,8 +990,8 @@ int bam_write1(BGZF *fp, const bam1_t *b) HTS_RESULT_USED;
    @param bsrc  Source alignment record
    @return bdst on success; NULL on failure
  */
-HTSLIB_EXPORT
-bam1_t *bam_copy1(bam1_t *bdst, const bam1_t *bsrc) HTS_RESULT_USED;
+HTS_EXPORT
+bam1_t *bam_copy1(bam1_t *bdst, const bam1_t *bsrc) ;
 
 /// Create a duplicate alignment record
 /**
@@ -1000,7 +1001,7 @@ bam1_t *bam_copy1(bam1_t *bdst, const bam1_t *bsrc) HTS_RESULT_USED;
    The bam1_t struct returned by a successful call should be freed
    via bam_destroy1() when it is no longer needed.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 bam1_t *bam_dup1(const bam1_t *bsrc);
 
 /// Sets all components of an alignment structure
@@ -1025,7 +1026,7 @@ bam1_t *bam_dup1(const bam1_t *bsrc);
 
    @return >= 0 on success (number of bytes written to bam->data), negative (with errno set) on failure.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int bam_set1(bam1_t *bam,
              size_t l_qname, const char *qname,
              uint16_t flag, int32_t tid, hts_pos_t pos, uint8_t mapq,
@@ -1054,7 +1055,7 @@ int bam_set1(bam1_t *bam,
    of bam1_core_t::l_qseq and bam1_t::data) limit the maximum query sequence
    length supported by HTSlib to fewer than INT_MAX bases.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_pos_t bam_cigar2qlen(int n_cigar, const uint32_t *cigar);
 
 /// Calculate reference length from CIGAR data
@@ -1071,7 +1072,7 @@ hts_pos_t bam_cigar2qlen(int n_cigar, const uint32_t *cigar);
    operations in @p cigar (these are the operations that "consume" reference
    bases).  All other operations (including invalid ones) are ignored.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_pos_t bam_cigar2rlen(int n_cigar, const uint32_t *cigar);
 
 /*!
@@ -1086,13 +1087,13 @@ hts_pos_t bam_cigar2rlen(int n_cigar, const uint32_t *cigar);
       string) or a read whose cigar string consumes no reference bases at all,
       we return b->core.pos + 1 by convention.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_pos_t bam_endpos(const bam1_t *b);
 
-HTSLIB_EXPORT
+HTS_EXPORT
 int   bam_str2flag(const char *str);    /** returns negative value on error */
 
-HTSLIB_EXPORT
+HTS_EXPORT
 char *bam_flag2str(int flag);   /** The string must be freed by the user */
 
 /*! @function
@@ -1100,7 +1101,7 @@ char *bam_flag2str(int flag);   /** The string must be freed by the user */
  @param  b  pointer to an alignment
  @return    0 on success, -1 on failure
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int bam_set_qname(bam1_t *b, const char *qname);
 
 /*! @function
@@ -1112,7 +1113,7 @@ int bam_set_qname(bam1_t *b, const char *qname);
  @param  a_mem   [in/out]  address of the allocated number of buffer elements
  @return         number of processed CIGAR operators; 0 if error
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 size_t sam_parse_cigar(const char *in, char **end, uint32_t **a_cigar, uint32_t *a_mem);
 
 /*! @function
@@ -1123,7 +1124,7 @@ size_t sam_parse_cigar(const char *in, char **end, uint32_t **a_cigar, uint32_t 
  @param  b       [in/out]  address of the destination bam1_t struct
  @return         number of processed CIGAR operators; 0 if error
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 size_t bam_parse_cigar(const char *in, char **end, bam1_t *b);
 
 /*************************
@@ -1153,15 +1154,15 @@ size_t bam_parse_cigar(const char *in, char **end, bam1_t *b);
     @note This must be called after the header has been written, but before
           any other data.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_idx_init(htsFile *fp, sam_hdr_t *h, int min_shift, const char *fnidx);
 
 /// Writes the index initialised with sam_idx_init to disk.
 /** @param fp        File handle for the data file being written.
     @return          0 on success, <0 on filaure.
 */
-HTSLIB_EXPORT
-int sam_idx_save(htsFile *fp) HTS_RESULT_USED;
+HTS_EXPORT
+int sam_idx_save(htsFile *fp) ;
 
 /// Load a BAM (.csi or .bai) or CRAM (.crai) index file
 /** @param fp  File handle of the data file whose index is being opened
@@ -1170,7 +1171,7 @@ int sam_idx_save(htsFile *fp) HTS_RESULT_USED;
 
 Equivalent to sam_index_load3(fp, fn, NULL, HTS_IDX_SAVE_REMOTE);
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_idx_t *sam_index_load(htsFile *fp, const char *fn);
 
 /// Load a specific BAM (.csi or .bai) or CRAM (.crai) index file
@@ -1181,7 +1182,7 @@ hts_idx_t *sam_index_load(htsFile *fp, const char *fn);
 
 Equivalent to sam_index_load3(fp, fn, fnidx, HTS_IDX_SAVE_REMOTE);
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_idx_t *sam_index_load2(htsFile *fp, const char *fn, const char *fnidx);
 
 /// Load or stream a BAM (.csi or .bai) or CRAM (.crai) index file
@@ -1202,7 +1203,7 @@ are always downloaded and never cached locally.
 The index struct returned by a successful call should be freed
 via hts_idx_destroy() when it is no longer needed.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_idx_t *sam_index_load3(htsFile *fp, const char *fn, const char *fnidx, int flags);
 
 /// Generate and save an index file
@@ -1212,8 +1213,8 @@ hts_idx_t *sam_index_load3(htsFile *fp, const char *fn, const char *fnidx, int f
              -2: opening fn failed; -3: format not indexable; -4:
              failed to create and/or save the index)
 */
-HTSLIB_EXPORT
-int sam_index_build(const char *fn, int min_shift) HTS_RESULT_USED;
+HTS_EXPORT
+int sam_index_build(const char *fn, int min_shift) ;
 
 /// Generate and save an index to a specific file
 /** @param fn        Input BAM/CRAM/etc filename
@@ -1222,8 +1223,8 @@ int sam_index_build(const char *fn, int min_shift) HTS_RESULT_USED;
     @return  0 if successful, or negative if an error occurred (see
              sam_index_build for error codes)
 */
-HTSLIB_EXPORT
-int sam_index_build2(const char *fn, const char *fnidx, int min_shift) HTS_RESULT_USED;
+HTS_EXPORT
+int sam_index_build2(const char *fn, const char *fnidx, int min_shift) ;
 
 /// Generate and save an index to a specific file
 /** @param fn        Input BAM/CRAM/etc filename
@@ -1233,8 +1234,8 @@ int sam_index_build2(const char *fn, const char *fnidx, int min_shift) HTS_RESUL
     @return  0 if successful, or negative if an error occurred (see
              sam_index_build for error codes)
 */
-HTSLIB_EXPORT
-int sam_index_build3(const char *fn, const char *fnidx, int min_shift, int nthreads) HTS_RESULT_USED;
+HTS_EXPORT
+int sam_index_build3(const char *fn, const char *fnidx, int min_shift, int nthreads) ;
 
 /// Free a SAM iterator
 /// @param iter     Iterator to free
@@ -1257,7 +1258,7 @@ When using one of these values, @p beg and @p end are ignored.
 
 When using HTS_IDX_REST or HTS_IDX_NONE, NULL can be passed in to @p idx.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_itr_t *sam_itr_queryi(const hts_idx_t *idx, int tid, hts_pos_t beg, hts_pos_t end);
 
 /// Create a SAM/BAM/CRAM iterator
@@ -1282,7 +1283,7 @@ The form `REF:` should be used when the reference name itself contains a colon.
 
 Note that SAM files must be bgzf-compressed for iterators to work.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_itr_t *sam_itr_querys(const hts_idx_t *idx, sam_hdr_t *hdr, const char *region);
 
 /// Create a multi-region iterator
@@ -1299,7 +1300,7 @@ in.
 The iterator will return all reads overlapping the given regions.  If a read
 overlaps more than one region, it will only be returned once.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_itr_t *sam_itr_regions(const hts_idx_t *idx, sam_hdr_t *hdr, hts_reglist_t *reglist, unsigned int regcount);
 
 /// Create a multi-region iterator
@@ -1326,7 +1327,7 @@ The form `REF:` should be used when the reference name itself contains a colon.
 The iterator will return all reads overlapping the given regions.  If a read
 overlaps more than one region, it will only be returned once.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 hts_itr_t *sam_itr_regarray(const hts_idx_t *idx, sam_hdr_t *hdr, char **regarray, unsigned int regcount);
 
 /// Get the next read from a SAM/BAM/CRAM iterator
@@ -1359,7 +1360,7 @@ static inline int sam_itr_next(htsFile *htsfp, hts_itr_t *itr, bam1_t *r) {
  */
 #define sam_itr_multi_next(htsfp, itr, r) sam_itr_next(htsfp, itr, r)
 
-HTSLIB_EXPORT
+HTS_EXPORT
 const char *sam_parse_region(sam_hdr_t *h, const char *s, int *tid,
                              hts_pos_t *beg, hts_pos_t *end, int flags);
 
@@ -1371,24 +1372,24 @@ const char *sam_parse_region(sam_hdr_t *h, const char *s, int *tid,
     #define sam_open_format(fn, mode, fmt) (hts_open_format((fn), (mode), (fmt)))
     #define sam_close(fp) hts_close(fp)
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int sam_open_mode(char *mode, const char *fn, const char *format);
 
     // A version of sam_open_mode that can handle ,key=value options.
     // The format string is allocated and returned, to be freed by the caller.
     // Prefix should be "r" or "w",
-    HTSLIB_EXPORT
+    HTS_EXPORT
     char *sam_open_mode_opts(const char *fn,
                              const char *mode,
                              const char *format);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int sam_hdr_change_HD(sam_hdr_t *h, const char *key, const char *val);
 
-    HTSLIB_EXPORT
-    int sam_parse1(kstring_t *s, sam_hdr_t *h, bam1_t *b) HTS_RESULT_USED;
-    HTSLIB_EXPORT
-    int sam_format1(const sam_hdr_t *h, const bam1_t *b, kstring_t *str) HTS_RESULT_USED;
+    HTS_EXPORT
+    int sam_parse1(kstring_t *s, sam_hdr_t *h, bam1_t *b) ;
+    HTS_EXPORT
+    int sam_format1(const sam_hdr_t *h, const bam1_t *b, kstring_t *str) ;
 
 /// sam_read1 - Read a record from a file
 /** @param fp   Pointer to the source file
@@ -1396,16 +1397,16 @@ const char *sam_parse_region(sam_hdr_t *h, const char *s, int *tid,
  *  @param b    Pointer to the record placeholder
  *  @return >= 0 on successfully reading a new record, -1 on end of stream, < -1 on error
  */
-    HTSLIB_EXPORT
-    int sam_read1(samFile *fp, sam_hdr_t *h, bam1_t *b) HTS_RESULT_USED;
+    HTS_EXPORT
+    int sam_read1(samFile *fp, sam_hdr_t *h, bam1_t *b) ;
 /// sam_write1 - Write a record to a file
 /** @param fp    Pointer to the destination file
  *  @param h     Pointer to the header structure previously read
  *  @param b     Pointer to the record to be written
  *  @return >= 0 on successfully writing the record, -1 on error
  */
-    HTSLIB_EXPORT
-    int sam_write1(samFile *fp, const sam_hdr_t *h, const bam1_t *b) HTS_RESULT_USED;
+    HTS_EXPORT
+    int sam_write1(samFile *fp, const sam_hdr_t *h, const bam1_t *b) ;
 
     /*************************************
      *** Manipulating auxiliary fields ***
@@ -1610,7 +1611,7 @@ static inline const uint8_t *sam_format_aux1(const uint8_t *key,
     invalid type, or the last record is incomplete) then errno is set to
     EINVAL and NULL is returned.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 uint8_t *bam_aux_get(const bam1_t *b, const char tag[2]);
 
 /// Return a SAM formatting string containing a BAM tag
@@ -1641,7 +1642,7 @@ static inline int bam_aux_get_str(const bam1_t *b,
     If the tag is not an integer type, errno is set to EINVAL.  This function
     will not return the value of floating-point tags.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int64_t bam_aux2i(const uint8_t *s);
 
 /// Get an integer aux value
@@ -1650,7 +1651,7 @@ int64_t bam_aux2i(const uint8_t *s);
     If the tag is not an numeric type, errno is set to EINVAL.  The value of
     integer flags will be returned cast to a double.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 double bam_aux2f(const uint8_t *s);
 
 /// Get a character aux value
@@ -1658,7 +1659,7 @@ double bam_aux2f(const uint8_t *s);
     @return The value, or 0 if the tag was not a character ('A') type
     If the tag is not a character type, errno is set to EINVAL.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 char bam_aux2A(const uint8_t *s);
 
 /// Get a string aux value
@@ -1666,7 +1667,7 @@ char bam_aux2A(const uint8_t *s);
     @return Pointer to the string, or NULL if the tag was not a string type
     If the tag is not a string type ('Z' or 'H'), errno is set to EINVAL.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 char *bam_aux2Z(const uint8_t *s);
 
 /// Get the length of an array-type ('B') tag
@@ -1674,7 +1675,7 @@ char *bam_aux2Z(const uint8_t *s);
     @return The length of the array, or 0 if the tag is not an array type.
     If the tag is not an array type, errno is set to EINVAL.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 uint32_t bam_auxB_len(const uint8_t *s);
 
 /// Get an integer value from an array-type tag
@@ -1685,7 +1686,7 @@ uint32_t bam_auxB_len(const uint8_t *s);
     is greater than or equal to  the value returned by bam_auxB_len(s),
     errno is set to ERANGE.  In both cases, 0 will be returned.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 int64_t bam_auxB2i(const uint8_t *s, uint32_t idx);
 
 /// Get a floating-point value from an array-type tag
@@ -1697,7 +1698,7 @@ int64_t bam_auxB2i(const uint8_t *s, uint32_t idx);
     idx is greater than or equal to  the value returned by bam_auxB_len(s),
     errno is set to ERANGE.  In both cases, 0.0 will be returned.
  */
-HTSLIB_EXPORT
+HTS_EXPORT
 double bam_auxB2f(const uint8_t *s, uint32_t idx);
 
 /// Append tag data to a bam record
@@ -1711,7 +1712,7 @@ If there is not enough space to store the additional tag, errno is set to
 ENOMEM.  If the type is invalid, errno may be set to EINVAL.  errno is
 also set to EINVAL if the bam record's aux data is corrupt.
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int bam_aux_append(bam1_t *b, const char tag[2], char type, int len, const uint8_t *data);
 
 /// Delete tag data from a bam record
@@ -1721,7 +1722,7 @@ int bam_aux_append(bam1_t *b, const char tag[2], char type, int len, const uint8
    If the bam record's aux data is corrupt, errno is set to EINVAL and this
    function returns -1;
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int bam_aux_del(bam1_t *b, uint8_t *s);
 
 /// Update or add a string-type tag
@@ -1751,7 +1752,7 @@ int bam_aux_del(bam1_t *b, uint8_t *s);
    reallocate the data buffer failed or the resulting buffer would be
    longer than the maximum size allowed in a bam record (2Gbytes).
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int bam_aux_update_str(bam1_t *b, const char tag[2], int len, const char *data);
 
 /// Update or add an integer tag
@@ -1775,7 +1776,7 @@ int bam_aux_update_str(bam1_t *b, const char tag[2], int len, const char *data);
    reallocate the data buffer failed or the resulting buffer would be
    longer than the maximum size allowed in a bam record (2Gbytes).
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int bam_aux_update_int(bam1_t *b, const char tag[2], int64_t val);
 
 /// Update or add a floating-point tag
@@ -1795,7 +1796,7 @@ int bam_aux_update_int(bam1_t *b, const char tag[2], int64_t val);
    reallocate the data buffer failed or the resulting buffer would be
    longer than the maximum size allowed in a bam record (2Gbytes).
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int bam_aux_update_float(bam1_t *b, const char tag[2], float val);
 
 /// Update or add an array tag
@@ -1834,7 +1835,7 @@ int bam_aux_update_float(bam1_t *b, const char tag[2], float val);
    reallocate the data buffer failed or the resulting buffer would be
    longer than the maximum size allowed in a bam record (2Gbytes).
 */
-HTSLIB_EXPORT
+HTS_EXPORT
 int bam_aux_update_array(bam1_t *b, const char tag[2],
                          uint8_t type, uint32_t items, void *data);
 
@@ -1904,31 +1905,31 @@ typedef struct bam_mplp_s *bam_mplp_t;
      *  The struct returned by a successful call should be freed
      *  via bam_plp_destroy() when it is no longer needed.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     bam_plp_t bam_plp_init(bam_plp_auto_f func, void *data);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_plp_destroy(bam_plp_t iter);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bam_plp_push(bam_plp_t iter, const bam1_t *b);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     const bam_pileup1_t *bam_plp_next(bam_plp_t iter, int *_tid, int *_pos, int *_n_plp);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     const bam_pileup1_t *bam_plp_auto(bam_plp_t iter, int *_tid, int *_pos, int *_n_plp);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     const bam_pileup1_t *bam_plp64_next(bam_plp_t iter, int *_tid, hts_pos_t *_pos, int *_n_plp);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     const bam_pileup1_t *bam_plp64_auto(bam_plp_t iter, int *_tid, hts_pos_t *_pos, int *_n_plp);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_plp_set_maxcnt(bam_plp_t iter, int maxcnt);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_plp_reset(bam_plp_t iter);
 
     /**
@@ -1939,10 +1940,10 @@ typedef struct bam_mplp_s *bam_mplp_t;
      *              a pointer to a locally allocated bam_pileup_cd union.  This union
      *              will also be present in each bam_pileup1_t created.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_plp_constructor(bam_plp_t plp,
                              int (*func)(void *data, const bam1_t *b, bam_pileup_cd *cd));
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_plp_destructor(bam_plp_t plp,
                             int (*func)(void *data, const bam1_t *b, bam_pileup_cd *cd));
 
@@ -1959,14 +1960,14 @@ typedef struct bam_mplp_s *bam_mplp_t;
      * If del_len is not NULL, the location pointed to is set to the length of
      * any deletion immediately following the insertion, or zero if none.
      */
-    HTSLIB_EXPORT
-    int bam_plp_insertion(const bam_pileup1_t *p, kstring_t *ins, int *del_len) HTS_RESULT_USED;
+    HTS_EXPORT
+    int bam_plp_insertion(const bam_pileup1_t *p, kstring_t *ins, int *del_len) ;
 
     /// Create a new bam_mplp_t structure
     /** The struct returned by a successful call should be freed
      *  via bam_mplp_destroy() when it is no longer needed.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     bam_mplp_t bam_mplp_init(int n, bam_plp_auto_f func, void **data);
 
     /// Set up mpileup overlap detection
@@ -1981,29 +1982,29 @@ typedef struct bam_mplp_s *bam_mplp_t;
      *  is increased to the sum of their qualities (capped at 200), otherwise
      *  it is multiplied by 0.8.
      */
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bam_mplp_init_overlaps(bam_mplp_t iter);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_mplp_destroy(bam_mplp_t iter);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_mplp_set_maxcnt(bam_mplp_t iter, int maxcnt);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bam_mplp_auto(bam_mplp_t iter, int *_tid, int *_pos, int *n_plp, const bam_pileup1_t **plp);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int bam_mplp64_auto(bam_mplp_t iter, int *_tid, hts_pos_t *_pos, int *n_plp, const bam_pileup1_t **plp);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_mplp_reset(bam_mplp_t iter);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_mplp_constructor(bam_mplp_t iter,
                               int (*func)(void *data, const bam1_t *b, bam_pileup_cd *cd));
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     void bam_mplp_destructor(bam_mplp_t iter,
                              int (*func)(void *data, const bam1_t *b, bam_pileup_cd *cd));
 
@@ -2014,7 +2015,7 @@ typedef struct bam_mplp_s *bam_mplp_t;
  * BAQ calculation and realignment *
  ***********************************/
 
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_cap_mapq(bam1_t *b, const char *ref, hts_pos_t ref_len, int thres);
 
 /// Calculate BAQ scores
@@ -2057,7 +2058,7 @@ Depending on what previous processing happened, this may or may not be the
 correct thing to do.  It would be wise to avoid this situation if possible.
 */
 
-HTSLIB_EXPORT
+HTS_EXPORT
 int sam_prob_realn(bam1_t *b, const char *ref, hts_pos_t ref_len, int flag);
 
 #ifdef __cplusplus

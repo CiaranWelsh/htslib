@@ -35,7 +35,6 @@
  * Author: James Bonfield, Wellcome Trust Sanger Institute. 2014
  */
 
-#define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
 
 #include <stdint.h>
@@ -44,7 +43,11 @@
 #include "_unistd.h"
 #include <assert.h>
 #include <string.h>
+#ifdef WIN32
+#   include "_time.h"
+#else
 #include <sys/time.h>
+#endif
 #include <limits.h>
 
 #include "rANS_static.h"

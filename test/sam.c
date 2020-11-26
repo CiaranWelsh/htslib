@@ -35,7 +35,8 @@ DEALINGS IN THE SOFTWARE.  */
 #include "_unistd.h"
 
 // Suppress message for faidx_fetch_nseq(), which we're intentionally testing
-#include "htslib/hts_defs.h"
+#include "hts_export.h"
+#include "hts_defs.h"
 #undef HTS_DEPRECATED
 #define HTS_DEPRECATED(message)
 

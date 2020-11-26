@@ -23,16 +23,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.  */
 
-#define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
-#include "htslib/hts_defs.h"
+#include "hts_export.h"
+#include "hts_defs.h"
 
 // Windows (maybe more) lack a drand48 implementation.
 #ifndef HAVE_DRAND48
 #include "os/rand.c"
 #else
 #include <stdlib.h>
-HTSLIB_EXPORT
+HTS_EXPORT
 void hts_srand48(long seed)
 {
 #ifdef HAVE_SRAND48_DETERMINISTIC
@@ -42,13 +42,13 @@ void hts_srand48(long seed)
 #endif
 }
 
-HTSLIB_EXPORT
+HTS_EXPORT
 double hts_erand48(unsigned short xseed[3]) { return erand48(xseed); }
 
-HTSLIB_EXPORT
+HTS_EXPORT
 double hts_drand48(void) { return drand48(); }
 
-HTSLIB_EXPORT
+HTS_EXPORT
 long hts_lrand48(void) { return lrand48(); }
 #endif
 

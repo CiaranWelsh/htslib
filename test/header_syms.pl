@@ -30,7 +30,7 @@
 # then looking through the rest for function declarations.
 
 # Roughly equivalent Exuberant-ctags command is:
-# ctags -f - -n -I HTS_RESULT_USED -I HTS_DEPRECATED+ -I HTS_FORMAT+ \
+# ctags -f - -n -I  -I HTS_DEPRECATED+ -I HTS_FORMAT+ \
 #       -I KS_ATTR_PRINTF+ -I knet_win32_destroy+ -I knet_win32_init+
 # Unfortunately this is not the default ctags on all platforms, hence this
 # script.
@@ -81,8 +81,8 @@ sub extract_symbols {
     $text =~ s/typedef\s+[^;]+;//sg;
 
     # Get rid of some macros
-    $text =~ s/HTS_RESULT_USED//g;
-    $text =~ s/HTSLIB_EXPORT//g;
+    $text =~ s///g;
+    $text =~ s/HTS_EXPORT//g;
 
     $text =~ s/HTS_DEPRECATED\s*?\(\"[^"]+\"?\)//g;
     $text =~ s/HTS_FORMAT\s*?\(.*?\)//g;

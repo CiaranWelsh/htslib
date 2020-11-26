@@ -24,7 +24,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.  */
 
-#define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
 
 #include <stdio.h>
@@ -58,13 +57,13 @@ KHASH_MAP_INIT_STR(vdict, bcf_idinfo_t)
 typedef khash_t(vdict) vdict_t;
 
 #include "htslib/kseq.h"
-HTSLIB_EXPORT
+HTS_EXPORT
 uint32_t bcf_float_missing    = 0x7F800001;
 
-HTSLIB_EXPORT
+HTS_EXPORT
 uint32_t bcf_float_vector_end = 0x7F800002;
 
-HTSLIB_EXPORT
+HTS_EXPORT
 uint8_t bcf_type_shift[] = { 0, 0, 1, 2, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 static bcf_idinfo_t bcf_idinfo_def = { .info = { 15, 15, 15 }, .hrec = { NULL, NULL, NULL}, .id = -1 };
@@ -149,7 +148,7 @@ int bcf_hdr_add_sample(bcf_hdr_t *h, const char *s)
     return bcf_hdr_add_sample_len(h, s, 0);
 }
 
-int HTS_RESULT_USED bcf_hdr_parse_sample_line(bcf_hdr_t *h, const char *str)
+int  bcf_hdr_parse_sample_line(bcf_hdr_t *h, const char *str)
 {
     int ret = 0;
     int i = 0;

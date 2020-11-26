@@ -38,6 +38,7 @@
 #include "_unistd.h"
 
 
+#include "hts_export.h"
 #include "hts_defs.h"
 #include "kroundup.h"
 
@@ -83,32 +84,32 @@ typedef struct ks_tokaux_t {
 extern "C" {
 #endif
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
 	int kvsprintf(kstring_t *s, const char *fmt, va_list ap) KS_ATTR_PRINTF(2,0);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
 	int ksprintf(kstring_t *s, const char *fmt, ...) KS_ATTR_PRINTF(2,3);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int kputd(double d, kstring_t *s); // custom %g only handler
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
 	int ksplit_core(char *s, int delimiter, int *_max, int **_offsets);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
 	char *kstrstr(const char *str, const char *pat, int **_prep);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
 	char *kstrnstr(const char *str, const char *pat, int n, int **_prep);
 
-    HTSLIB_EXPORT
+    HTS_EXPORT
 	void *kmemmem(const void *_str, int n, const void *_pat, int m, int **_prep);
 
 	/* kstrtok() is similar to strtok_r() except that str is not
 	 * modified and both str and sep can be NULL. For efficiency, it is
 	 * actually recommended to set both to NULL in the subsequent calls
 	 * if sep is not changed. */
-    HTSLIB_EXPORT
+    HTS_EXPORT
 	char *kstrtok(const char *str, const char *sep, ks_tokaux_t *aux);
 
     /* kgetline() uses the supplied fgets()-like function to read a "\n"-
@@ -116,7 +117,7 @@ extern "C" {
      * kstring without its terminator and 0 is returned; EOF is returned at
      * EOF or on error (determined by querying fp, as per fgets()). */
     typedef char *kgets_func(char *, int, void *);
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int kgetline(kstring_t *s, kgets_func *fgets_fn, void *fp);
 
     /* kgetline2() uses the supplied hgetln()-like function to read a "\n"-
@@ -124,7 +125,7 @@ extern "C" {
      * ksring without its terminator and 0 is returned; EOF is returned at
      * EOF or on error (determined by querying fp, as per fgets()). */
     typedef ssize_t kgets_func2(char *, size_t, void *);
-    HTSLIB_EXPORT
+    HTS_EXPORT
     int kgetline2(kstring_t *s, kgets_func2 *fgets_fn, void *fp);
 
 #ifdef __cplusplus
