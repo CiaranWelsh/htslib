@@ -31,6 +31,9 @@ DEALINGS IN THE SOFTWARE.  */
 #include "htslib/ksort.h"
 #include "htslib/hts_os.h" // for drand48
 
+#define _USE_MATH_DEFINES // for C
+#include <math.h>
+
 KSORT_INIT_STATIC_GENERIC(uint16_t)
 
 struct errmod_t {
