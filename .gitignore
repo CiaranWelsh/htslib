@@ -69,3 +69,4 @@ shlib-exports-*.txt
 
 .idea
 cmake-*
+install-*
