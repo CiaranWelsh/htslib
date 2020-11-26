@@ -18,6 +18,7 @@ include(CheckCXXSymbolExists)
 include(CheckLibraryExists)
 include(CheckIncludeFile)
 include(CheckFunctionExists)
+include(CheckTypeSize)
 include(GNUInstallDirs)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -189,8 +190,21 @@ set(_LARGE_FILES)
 #/* Needed for PTHREAD_MUTEX_RECURSIVE */
 set(_XOPEN_SOURCE)
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/config.h")
+# Added by Ciaran Welsh for windows
 
+## check to see if ssize_t exists. On linux yes, windows no.
+check_type_size(ssize_t SSIZE_T LANGUAGE C)
+
+configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/config.h.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+)
+
+set(HTS_VERSION_TEXT ${PROJECT_VERSION})
+configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/version.h.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/version.h"
+)
 
 ########################################################
 #   Build
@@ -242,7 +256,6 @@ set(
         "${CMAKE_CURRENT_SOURCE_DIR}/sam_internal.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/textutils_internal.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/thread_pool_internal.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/version.h"
 )
 
 set(
@@ -291,13 +304,27 @@ target_include_directories(hts-static PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
         $<BUILD_INTERFACE:${HTS_INCLUDE_DIR}>
         )
-target_link_libraries(hts-static PUBLIC
-        BZip2::BZip2
-        LibLZMA::LibLZMA
-        ZLIB::ZLIB
-        CURL::libcurl
-        Threads::Threads
-        )
+
+set(LINK_TARGETS)
+if("$<TARGET_EXISTS:BZip2::BZip2>")
+    set(LINK_TARGETS ${LINK_TARGETS} BZip2::BZip2)
+endif()
+if("$<TARGET_EXISTS:LibLZMA::LibLZMA>")
+    set(LINK_TARGETS ${LINK_TARGETS} LibLZMA::LibLZMA)
+endif()
+if("$<TARGET_EXISTS:ZLIB::ZLIB>")
+    set(LINK_TARGETS ${LINK_TARGETS} ZLIB::ZLIB)
+endif()
+if("$<TARGET_EXISTS:CURL::libcurl>")
+    set(LINK_TARGETS ${LINK_TARGETS} CURL::libcurl)
+endif()
+if("$<TARGET_EXISTS:Threads::Threads>")
+    set(LINK_TARGETS ${LINK_TARGETS} Threads::Threads)
+endif()
+
+message(STATUS "Found link targets: ${LINK_TARGETS}")
+
+target_link_libraries(hts-static PUBLIC ${LINK_TARGETS})
 
 add_library(hts SHARED hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
 target_include_directories(hts PUBLIC

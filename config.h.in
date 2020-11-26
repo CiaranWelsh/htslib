@@ -128,4 +128,7 @@
 /* Needed for PTHREAD_MUTEX_RECURSIVE */
 #cmakedefine _XOPEN_SOURCE
 
+/* for port to windows. Added by Ciaran Welsh */
+#cmakedefine SSIZE_T
+
 #endif //HTSLIB_CMAKE_CONFIG2_H_IN_H

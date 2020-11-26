@@ -1,0 +1,10 @@
+//
+// Created by Ciaran on 26/11/2020.
+//
+
+#ifndef HTSLIB_CMAKE_VERSION_H_IN
+#define HTSLIB_CMAKE_VERSION_H_IN
+
+#cmakedefine HTS_VERSION_TEXT "@HTS_VERSION_TEXT@"
+
+#endif //HTSLIB_CMAKE_VERSION_H_IN
