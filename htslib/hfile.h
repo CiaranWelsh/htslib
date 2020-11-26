@@ -29,7 +29,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <string.h>
 
 #include <sys/types.h>
-#include "ssize_t_typedef.h"
+#include "_unistd.h"
 
 
 #include "hts_defs.h"

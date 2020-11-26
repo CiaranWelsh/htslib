@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
-#include "ssize_t_typedef.h"
+#include "_unistd.h"
 
 #include <sys/stat.h>
 #include <fcntl.h>
