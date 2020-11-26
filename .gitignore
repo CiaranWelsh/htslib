@@ -11,8 +11,8 @@
 
 autom4te.cache
 config.cache
-config.h
-config.h.in
+_config.h
+_config.h.in
 config.log
 config.mk
 config.status
@@ -68,3 +68,4 @@ shlib-exports-*.txt
 /TAGS
 
 .idea
+cmake-*
