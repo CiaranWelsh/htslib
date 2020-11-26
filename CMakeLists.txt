@@ -22,6 +22,17 @@ include(GNUInstallDirs)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# put all runtime targets (exe and dll) into bin
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+
+# put libraries into lib
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+
+# archives
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+
 
 
 ########################################################
@@ -32,6 +43,7 @@ find_package(BZip2)
 find_package(LibLZMA)
 find_package(ZLIB)
 find_package(CURL)
+find_package(Threads)
 
 ########################################################
 #   make a config.h like the one produced by ./configure
@@ -51,6 +63,12 @@ option(ENABLE_PLUGINS "Enable htslib plugins" OFF)
 
 #/* Define if HTSlib should enable S3 support. */
 option(ENABLE_S3 "Enable Amazon S3 support" OFF)
+
+
+option(BUILD_TESTS "build htslib tests" OFF)
+option(BUILD_BGZIP "build the bgzip program" OFF)
+option(BUILD_HTSFILE "build the htsfile program" OFF)
+option(BUILD_TABIX "build the tabix program" OFF)
 
 #/* Define if you have the Common Crypto library. */
 # need to wait until you do mac before you can figure this one out
@@ -177,21 +195,12 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in" "${CMAKE_CURRENT_BINARY
 ########################################################
 #   Build
 #
-file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
-file(GLOB HEADER_FILE "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-file(GLOB CRAM_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/cram/*.c")
-file(GLOB CRAM_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/cram/*.h")
 
-message(MESSAGE "SOURCE_FILES ${SOURCE_FILES}")
-message(MESSAGE "HEADER_FILE ${HEADER_FILE}")
-message(MESSAGE "CRAM_SOURCE_FILES ${CRAM_SOURCE_FILES}")
-message(MESSAGE "CRAM_HEADER_FILES ${CRAM_HEADER_FILES}")
 
 set(
         SOURCE_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/bgzf.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/bgzip.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/errmod.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/faidx.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/header.c"
@@ -203,7 +212,6 @@ set(
         "${CMAKE_CURRENT_SOURCE_DIR}/hfile_s3_write.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/hts.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/hts_os.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/htsfile.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/kfunc.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/knetfile.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/kstring.c"
@@ -276,12 +284,63 @@ set(
 )
 
 set(HTS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/htslib")
-add_library(hts STATIC hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
-target_include_directories(hts PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/cram
-        ${CMAKE_CURRENT_BINARY_DIR}
-        ${HTS_INCLUDE_DIR}
+add_library(hts-static STATIC hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
+target_include_directories(hts-static PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cram>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<BUILD_INTERFACE:${HTS_INCLUDE_DIR}>
+        )
+target_link_libraries(hts-static PUBLIC
+        BZip2::BZip2
+        LibLZMA::LibLZMA
+        ZLIB::ZLIB
+        CURL::libcurl
+        Threads::Threads
         )
 
+add_library(hts SHARED hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
+target_include_directories(hts PUBLIC
+        $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
+target_link_libraries(hts PUBLIC $<TARGET_PROPERTY:hts-static,LINK_LIBRARIES>)
+set_target_properties(hts PROPERTIES
+    SOVERSION ${PROJECT_VERSION}
+)
+install(TARGETS hts hts-static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT htslib)
+install(DIRECTORY htslib DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT htslib)
+install(FILES bgzip.1 htsfile.1 tabix.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 COMPONENT htslib)
+install(FILES faidx.5 sam.5 vcf.5 DESTINATION ${CMAKE_INSTALL_MANDIR}/man5 COMPONENT htslib)
+install(FILES  htslib-s3-plugin.7 DESTINATION ${CMAKE_INSTALL_MANDIR}/man7 COMPONENT htslib)
 
+set(BGZIP_SOURCES bgzip.c bgzf.c htslib/bgzf.h htslib/hts.h)
+set(HTSFILE_SOURCES htsfile.c htslib/hts.h htslib/sam.h htslib/vcf.h)
+set(TABIX_SOURCES tabix.c htslib/tbx.h htslib/sam.h htslib/vcf.h
+        htslib/kseq.h htslib/bgzf.h htslib/hts.h
+        htslib/regidx.h htslib/hts_defs.h htslib/hts_log.h)
+
+if (BUILD_BGZIP)
+    add_executable(bgzip ${BGZIP_SOURCES})
+    target_include_directories(bgzip PRIVATE $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
+    target_link_libraries(bgzip PRIVATE hts-static)
+    install(TARGETS bgzip DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bgzip)
+endif ()
+
+if (BUILD_HTSFILE)
+    add_executable(htsfile ${HTSFILE_SOURCES})
+    target_include_directories(htsfile PRIVATE $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
+    target_link_libraries(htsfile PRIVATE hts-static)
+    install(TARGETS htsfile DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT htsfile)
+endif ()
+
+if (BUILD_TABIX)
+    add_executable(tabix ${TABIX_SOURCES})
+    target_include_directories(tabix PRIVATE $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
+    target_link_libraries(tabix PRIVATE hts-static)
+    install(TARGETS tabix DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT tabix)
+endif ()
+
+
+if (BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif ()
