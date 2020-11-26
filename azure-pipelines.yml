@@ -8,7 +8,7 @@ stages:
     jobs:
       - job:
         pool:
-          name: ubuntu-latest
+          name: 'ubuntu-20.04'
         variables:
           BUILD_DIRECTORY: $(Build.SourcesDirectory)/build
           INSTALL_DIRECTORY: $(Build.SourcesDirectory)/install_azure
