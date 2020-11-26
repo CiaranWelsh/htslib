@@ -63,7 +63,7 @@ endfunction()
 #   this means we'll have to use add_custom_target to execute these tests.
 #   however, since I didn't write this library it'll take some effort to
 #   figure out the correct arguments for these programs. Therefore, I postpone.
-add_test_executable(test_hts_endian TEST_PROGRAMS           NO  hts_endian.c)
+add_test_executable(test_hts_endian TEST_PROGRAMS           YES  hts_endian.c)
 add_test_executable(test_hts_open_fuzzer TEST_PROGRAMS      NO  fuzz/hts_open_fuzzer.c)
 add_test_executable(test-fieldarith TEST_PROGRAMS           NO  fieldarith.c )
 add_test_executable(test-hfile TEST_PROGRAMS                NO  hfile.c)
@@ -93,7 +93,6 @@ add_test_executable(thrash_threads5 THRASH_TEST_PROGRAMS    No  thrash_threads5.
 add_test_executable(thrash_threads6 THRASH_TEST_PROGRAMS    No  thrash_threads6.c)
 
 
-add_custom_target(run_thrash_threads1
-        COMMAND $<TARGET_FILE:thrash_threads1> no_hdr_sq_1.bam)
+
 
 install(TARGETS ${TEST_PROGRAMS} ${THRASH_TEST_PROGRAMS} DESTINATION ${CMAKE_INSTALL_BINDIR})
