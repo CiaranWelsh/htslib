@@ -1,0 +1,31 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  - master
+  - cmake
+  - develop
+
+stages:
+  - stage: Build 
+    jobs: 
+      - job:
+        pool: ubuntu-18.04
+        variables:
+          BUILD_DIRECTORY: $(Build.SourcesDirectory)/build
+          INSTALL_DIRECTORY: $(Build.SourcesDirectory)/install_azure
+          SOURCE_DIRECTORY: $(Build.SourcesDirectory)
+        steps:
+          - bash: |
+              sudo apt install zlib1g zlib1g-dev lzma bzip2 curl libcurl4-openssl-dev
+            displayName: Install Dependencies
+          - bash: | 
+              mkdir $(BUILD_DIRECTORY)
+              cd $(BUILD_DIRECTORY)
+              cmake -DCMAKE_INSTALL_PREFIX=$(INSTALL_DIRECTORY) .. 
+              cmake --build . --target install --config Release -j 8
+
+
+
