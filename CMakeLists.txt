@@ -17,6 +17,7 @@ include(CheckSymbolExists)
 include(CheckCXXSymbolExists)
 include(CheckLibraryExists)
 include(CheckIncludeFile)
+include(CheckIncludeFileCXX)
 include(CheckFunctionExists)
 include(CheckTypeSize)
 include(GNUInstallDirs)
@@ -40,11 +41,15 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 #   dependencies
 #
 
-find_package(BZip2)
-find_package(LibLZMA)
-find_package(ZLIB)
-find_package(CURL)
-find_package(Threads)
+find_package(BZip2 REQUIRED)
+find_package(LibLZMA REQUIRED)
+find_package(ZLIB REQUIRED)
+find_package(CURL REQUIRED)
+find_package(Threads REQUIRED)
+
+# note, it seems that on windows and linux, openssl is a requirement for HMAC
+# while on apple we instead need common crypto
+find_package(OpenSSL)
 
 ########################################################
 #   make a config.h like the one produced by ./configure
@@ -91,7 +96,16 @@ check_symbol_exists(getpagesize unistd.h HAVE_GETPAGESIZE)
 check_symbol_exists(gmtime_r time.h HAVE_GMTIME_R)
 
 #/* Define if you have libcrypto-style HMAC(). */
-check_include_file(openssl/hmac.h HAVE_HMAC)
+set(CMAKE_REQUIRED_INCLUDES "${CMAKE_REQUIRED_INCLUDES}" "${OPENSSL_INCLUDE_DIR}")
+
+# This was hard on windows using check_include_file so we
+# use the full wack find_path instead.
+find_path(HAVE_HMAC
+        NAMES
+            openssl/hmac.h
+        HINTS
+            "${OPENSSL_INCLUDE_DIR}"
+)
 
 #/* Define to 1 if you have the <inttypes.h> header file. */
 check_include_file(inttypes.h HAVE_INTTYPES_H)
@@ -206,6 +220,9 @@ configure_file(
         "${CMAKE_CURRENT_BINARY_DIR}/version.h"
 )
 
+
+# todo error if no ssl OR apple equivalent. Since one or the other is reuqired.
+
 ########################################################
 #   Build
 #
@@ -307,26 +324,31 @@ target_include_directories(hts-static PUBLIC
         )
 
 set(LINK_TARGETS)
-if("$<TARGET_EXISTS:BZip2::BZip2>")
+set(INCLUDE_DIRECTORIES)
+if("${BZip2_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} BZip2::BZip2)
 endif()
-if("$<TARGET_EXISTS:LibLZMA::LibLZMA>")
+if("${LibLZMA_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} LibLZMA::LibLZMA)
 endif()
-if("$<TARGET_EXISTS:ZLIB::ZLIB>")
+if("${ZLIB_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} ZLIB::ZLIB)
 endif()
-if("$<TARGET_EXISTS:CURL::libcurl>")
+if("${CURL_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} CURL::libcurl)
 endif()
-if("$<TARGET_EXISTS:Threads::Threads>")
+if("${Threads_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} Threads::Threads)
+endif()
+if("${OpenSSL_FOUND}")
+    set(LINK_TARGETS ${LINK_TARGETS} OpenSSL::SSL OpenSSL::Crypto)
+    set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${OPENSSL_INCLUDE_DIR}")
 endif()
 
 message(STATUS "Found link targets: ${LINK_TARGETS}")
 
 target_link_libraries(hts-static PUBLIC ${LINK_TARGETS})
-
+target_include_directories(hts-static PUBLIC ${INCLUDE_DIRECTORIES})
 add_library(hts SHARED hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
 target_include_directories(hts PUBLIC
         $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
