@@ -33,7 +33,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <inttypes.h>
 
 #include "hts_export.h"
-#include "hts_defs.h"
+
 #include "hts_log.h"
 #include "kstring.h"
 #include "kroundup.h"

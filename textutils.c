@@ -218,27 +218,24 @@ static char token_type(hts_json_token *token)
     }
 }
 
-HTS_EXPORT
+
 hts_json_token * hts_json_alloc_token() {
     return calloc(1, sizeof(hts_json_token));
 }
 
-HTS_EXPORT
+
 char hts_json_token_type(hts_json_token *token) {
     return token->type;
 }
 
-HTS_EXPORT
 void hts_json_free_token(hts_json_token *token) {
     free(token);
 }
 
-HTS_EXPORT
 char *hts_json_token_str(hts_json_token *token) {
     return token->str;
 }
 
-HTS_EXPORT
 char hts_json_snext(char *str, size_t *state, hts_json_token *token)
 {
     char *s = &str[*state >> 2];
@@ -288,7 +285,7 @@ char hts_json_snext(char *str, size_t *state, hts_json_token *token)
 #undef STATE
 }
 
-HTS_EXPORT
+
 char hts_json_fnext(struct hFILE *fp, hts_json_token *token, kstring_t *kstr)
 {
     char peek;
@@ -387,7 +384,7 @@ static char snext(void *arg1, void *arg2, hts_json_token *token)
     return hts_json_snext(arg1, arg2, token);
 }
 
-HTS_EXPORT
+
 char hts_json_sskip_value(char *str, size_t *state, char type)
 {
     return skip_value(type, snext, str, state);
@@ -398,7 +395,7 @@ static char fnext(void *arg1, void *arg2, hts_json_token *token)
     return hts_json_fnext(arg1, token, arg2);
 }
 
-HTS_EXPORT
+
 char hts_json_fskip_value(struct hFILE *fp, char type)
 {
     kstring_t str = { 0, 0, NULL };

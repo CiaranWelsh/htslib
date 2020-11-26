@@ -44,7 +44,7 @@ DEALINGS IN THE SOFTWARE.  */
 
 // Suppress deprecation message for cigar_tab, which we initialise
 #include "hts_export.h"
-#include "hts_defs.h"
+
 #undef HTS_DEPRECATED
 #define HTS_DEPRECATED(message)
 
@@ -65,6 +65,10 @@ KHASH_DECLARE(s2i, kh_cstr_t, int64_t)
 #endif
 #ifndef EOVERFLOW
 #define EOVERFLOW ERANGE
+#endif
+
+#ifdef _WIN32
+#include "_usleep.h"
 #endif
 
 /**********************

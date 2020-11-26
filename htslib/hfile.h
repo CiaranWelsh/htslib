@@ -33,7 +33,7 @@ DEALINGS IN THE SOFTWARE.  */
 
 
 #include "hts_export.h"
-#include "hts_defs.h"
+
 
 #ifdef __cplusplus
 extern "C" {

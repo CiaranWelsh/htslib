@@ -31,7 +31,7 @@
 
 #include <stdint.h>
 #include "hts_export.h"
-#include "hts_defs.h"
+
 #include "hts.h"
 
 #ifdef __cplusplus

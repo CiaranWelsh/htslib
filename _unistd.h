@@ -10,7 +10,8 @@
 
 #include <stdlib.h>
 #include <io.h>
-#include <getopt.h> /* getopt at: https://gist.github.com/ashelly/7776712 */
+
+#include "_getopt.h"
 #include <process.h> /* for getpid() and the exec..() family */
 #include <direct.h> /* for _getcwd() and _chdir() */
 

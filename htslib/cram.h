@@ -42,7 +42,7 @@ DEALINGS IN THE SOFTWARE.  */
 
 
 #include "hts_export.h"
-#include "hts_defs.h"
+
 #include "hts.h"
 #include "sam.h"
 

@@ -25,7 +25,7 @@ DEALINGS IN THE SOFTWARE.  */
 
 #include <config.h>
 #include "hts_export.h"
-#include "hts_defs.h"
+
 
 // Windows (maybe more) lack a drand48 implementation.
 #ifndef HAVE_DRAND48

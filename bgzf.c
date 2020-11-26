@@ -56,6 +56,9 @@
 #define BLOCK_HEADER_LENGTH 18
 #define BLOCK_FOOTER_LENGTH 8
 
+#ifdef _WIN32
+#include "_usleep.h"
+#endif
 
 /* BGZF/GZIP header (specialized from RFC 1952; little endian):
  +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+

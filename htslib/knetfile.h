@@ -34,7 +34,7 @@
 
 
 #include "hts_export.h"
-#include "hts_defs.h"
+
 
 #ifndef _WIN32
 #define netread(fd, ptr, len) read(fd, ptr, len)

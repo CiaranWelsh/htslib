@@ -38,10 +38,10 @@ DEALINGS IN THE SOFTWARE.  */
 #include "htslib/khash.h"
 KHASH_DECLARE(s2i, kh_cstr_t, int64_t)
 
-HTS_EXPORT
+
 const tbx_conf_t tbx_conf_gff = { 0, 1, 4, 5, '#', 0 };
 
-HTS_EXPORT
+
 const tbx_conf_t tbx_conf_bed = { TBX_UCSC, 1, 2, 3, '#', 0 };
 
 HTS_EXPORT

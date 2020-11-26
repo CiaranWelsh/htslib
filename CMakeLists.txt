@@ -35,7 +35,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 # archives
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
-
+if(MSVC)
+    # get rid of warning:
+    #   LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs;
+    #       use /NODEFAULTLIB:library
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" "/NODEFAULTLIB")
+endif()
 
 ########################################################
 #   dependencies
@@ -44,8 +49,13 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 find_package(BZip2 REQUIRED)
 find_package(LibLZMA REQUIRED)
 find_package(ZLIB REQUIRED)
-find_package(CURL REQUIRED)
-find_package(Threads REQUIRED)
+find_package(CURL  REQUIRED)
+
+# This was akward. Installed on vcpkg then went to
+# D:\vcpkg\installed\x64-windows-static\share\pthread
+# to figure out what variables pthreads imports.
+# Looks like PThreads4W_LIBRARY_RELEASE holds our release library
+find_package(pthreads CONFIG REQUIRED)
 
 # note, it seems that on windows and linux, openssl is a requirement for HMAC
 # while on apple we instead need common crypto
@@ -102,10 +112,10 @@ set(CMAKE_REQUIRED_INCLUDES "${CMAKE_REQUIRED_INCLUDES}" "${OPENSSL_INCLUDE_DIR}
 # use the full wack find_path instead.
 find_path(HAVE_HMAC
         NAMES
-            openssl/hmac.h
+        openssl/hmac.h
         HINTS
-            "${OPENSSL_INCLUDE_DIR}"
-)
+        "${OPENSSL_INCLUDE_DIR}"
+        )
 
 #/* Define to 1 if you have the <inttypes.h> header file. */
 check_include_file(inttypes.h HAVE_INTTYPES_H)
@@ -117,7 +127,7 @@ check_library_exists(bz2 BZ2_bzReadOpen ${BZIP2_LIBRARIES} HAVE_LIBBZ2)
 find_library(DEFLATE_LIBRARY
         NAMES ${CMAKE_SHARED_LIBRARY_PREFIX}deflate${CMAKE_SHARED_LIBRARY_SUFFIX}
         )
-MESSAGE(STATUS "DEFLATE_LIBRARY ${DEFLATE_LIBRARY}")
+
 if (${DEFLATE_LIBRARY})
     set(HAVE_LIBDEFLATE TRUE)
 endif ()
@@ -231,70 +241,77 @@ configure_file(
 #   Build
 #
 
-
 set(
         SOURCE_FILES
+        "${CMAKE_CURRENT_SOURCE_DIR}/errmod.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/faidx.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/header.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hfile.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hfile_gcs.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hfile_libcurl.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hfile_net.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hfile_s3.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hfile_s3_write.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hts.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hts_os.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/kfunc.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/knetfile.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/kstring.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/md5.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/multipart.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/probaln.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/realn.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/regidx.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/region.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/sam.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/synced_bcf_reader.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tbx.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/thread_pool.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/vcf.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/vcf_sweep.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/vcfutils.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/_unistd.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/_time.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/_time.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/dirent.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/dlfcn.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/dlfcn.h"
+        # todo check whether these sources are needed by htslib
         "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/bgzf.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/errmod.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/faidx.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/header.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/hfile.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/hfile_gcs.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/hfile_libcurl.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/hfile_net.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/hfile_s3.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/hfile_s3_write.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/hts.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/hts_os.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/kfunc.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/knetfile.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/kstring.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/md5.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/multipart.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/plugin.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/probaln.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/realn.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/regidx.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/region.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/sam.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/synced_bcf_reader.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tabix.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tbx.c"
+#        "${CMAKE_CURRENT_SOURCE_DIR}/tabix.c" # has main
         "${CMAKE_CURRENT_SOURCE_DIR}/textutils.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/thread_pool.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/vcf.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/vcf_sweep.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/vcfutils.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_unistd.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/bgzf.c"
 )
 
 set(
         HEADER_FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/header.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/header.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/hfile_internal.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/hts_internal.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/sam_internal.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/textutils_internal.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/textutils_internal.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/thread_pool_internal.h"
 )
 
 set(
         CRAM_SOURCE_FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_codecs.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_decode.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_encode.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_external.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_index.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_io.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_samtools.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_stats.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/mFILE.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/open_trace_file.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/pooled_alloc.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/rANS_static.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/cram/string_alloc.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_codecs.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_decode.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_encode.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_external.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_index.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_io.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_samtools.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/cram_stats.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/mFILE.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/open_trace_file.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/pooled_alloc.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/rANS_static.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cram/string_alloc.c"
 )
 
 set(
@@ -329,43 +346,46 @@ target_include_directories(hts-static PUBLIC
 
 set(LINK_TARGETS)
 set(INCLUDE_DIRECTORIES)
-if("${BZip2_FOUND}")
+if ("${BZip2_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} BZip2::BZip2)
-endif()
-if("${LibLZMA_FOUND}")
+endif ()
+if ("${LibLZMA_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} LibLZMA::LibLZMA)
-endif()
-if("${ZLIB_FOUND}")
+endif ()
+if ("${ZLIB_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} ZLIB::ZLIB)
-endif()
-if("${CURL_FOUND}")
+endif ()
+if ("${CURL_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} CURL::libcurl)
-endif()
-if("${Threads_FOUND}")
+endif ()
+if (${Threads_FOUND})
     set(LINK_TARGETS ${LINK_TARGETS} Threads::Threads)
-endif()
-if("${OpenSSL_FOUND}")
+endif ()
+if ("${OpenSSL_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} OpenSSL::SSL OpenSSL::Crypto)
     set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${OPENSSL_INCLUDE_DIR}")
-endif()
+endif ()
+if ("${PThreads4W_FOUND}")
+    set(LINK_TARGETS ${LINK_TARGETS} $<IF:$<CONFIG:Debug>,${PThreads4W_LIBRARY_DEBUG},${PThreads4W_LIBRARY_RELEASE}>)
+    set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${PThreads4W_INCLUDE_DIR}")
+endif ()
 
-message(STATUS "Found link targets: ${LINK_TARGETS}")
+set(
+        INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES}
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+)
+
 # make static library
 target_link_libraries(hts-static PUBLIC ${LINK_TARGETS})
-
 target_include_directories(hts-static PUBLIC ${INCLUDE_DIRECTORIES})
-
 target_compile_definitions(hts-static PUBLIC HTS_STATIC_DEFINE)
 
 # shared library
 add_library(hts SHARED hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
-
-target_include_directories(hts PUBLIC $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
-
-target_link_libraries(hts PUBLIC $<TARGET_PROPERTY:hts-static,LINK_LIBRARIES>)
-
+target_include_directories(hts PUBLIC ${INCLUDE_DIRECTORIES})
+target_link_libraries(hts PUBLIC ${LINK_TARGETS})
 set_target_properties(hts PROPERTIES SOVERSION ${PROJECT_VERSION})
-
 target_compile_definitions(hts PUBLIC hts_EXPORTS)
 
 include(GenerateExportHeader)
@@ -375,7 +395,7 @@ install(TARGETS hts hts-static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT hts
 install(DIRECTORY htslib DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT htslib)
 install(FILES bgzip.1 htsfile.1 tabix.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 COMPONENT htslib)
 install(FILES faidx.5 sam.5 vcf.5 DESTINATION ${CMAKE_INSTALL_MANDIR}/man5 COMPONENT htslib)
-install(FILES  htslib-s3-plugin.7 DESTINATION ${CMAKE_INSTALL_MANDIR}/man7 COMPONENT htslib)
+install(FILES htslib-s3-plugin.7 DESTINATION ${CMAKE_INSTALL_MANDIR}/man7 COMPONENT htslib)
 
 
 ##########################################################################################

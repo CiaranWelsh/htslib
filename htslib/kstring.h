@@ -39,7 +39,7 @@
 
 
 #include "hts_export.h"
-#include "hts_defs.h"
+
 #include "kroundup.h"
 
 #if defined __GNUC__ && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4))

@@ -39,7 +39,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include "hts.h"
 #include "kstring.h"
 #include "hts_export.h"
-#include "hts_defs.h"
+
 #include "hts_endian.h"
 
 /* Included only for backwards compatibility with e.g. bcftools 1.10 */
@@ -124,7 +124,7 @@ typedef struct bcf_hdr_t {
     int32_t m[3];          // m: allocated size of the dictionary block in use (see n above)
 } bcf_hdr_t;
 
-extern uint8_t bcf_type_shift[];
+HTS_EXPORT extern uint8_t bcf_type_shift[];
 
 /**************
  * VCF record *
@@ -1340,8 +1340,8 @@ which works for both BCF and VCF.
 #define BCF_MIN_BT_INT16 (-32760)      /* INT16_MIN + 8 */
 #define BCF_MIN_BT_INT32 (-2147483640) /* INT32_MIN + 8 */
 
-extern uint32_t bcf_float_vector_end;
-extern uint32_t bcf_float_missing;
+HTS_EXPORT extern uint32_t bcf_float_vector_end;
+HTS_EXPORT extern uint32_t bcf_float_missing;
 static inline void bcf_float_set(float *ptr, uint32_t value)
 {
     union { uint32_t i; float f; } u;

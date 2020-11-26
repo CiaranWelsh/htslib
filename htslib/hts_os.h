@@ -27,7 +27,7 @@ DEALINGS IN THE SOFTWARE.  */
 #define HTSLIB_HTS_OS_H
 
 #include "hts_export.h"
-#include "hts_defs.h"
+
 
 #ifdef __cplusplus
 extern "C" {

@@ -33,7 +33,7 @@ DEALINGS IN THE SOFTWARE.  */
 
 #include "htslib/hfile.h"
 #include "hts_export.h"
-#include "hts_defs.h"
+
 #include "htslib/kstring.h"
 
 void HTS_NORETURN fail(const char *format, ...)

@@ -48,7 +48,7 @@ DEALINGS IN THE SOFTWARE.  */
 #define HTSLIB_THREAD_POOL_H
 
 #include "hts_export.h"
-#include "hts_defs.h"
+
 
 #ifdef __cplusplus
 extern "C" {

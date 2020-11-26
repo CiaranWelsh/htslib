@@ -36,7 +36,7 @@ DEALINGS IN THE SOFTWARE.  */
 
 // Suppress message for faidx_fetch_nseq(), which we're intentionally testing
 #include "hts_export.h"
-#include "hts_defs.h"
+
 #undef HTS_DEPRECATED
 #define HTS_DEPRECATED(message)
 

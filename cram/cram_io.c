@@ -87,6 +87,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RP(...)
 #endif
 
+#ifdef _WIN32
+#include "_usleep.h"
+#endif
+
 #include "../htslib/hfile.h"
 #include "../htslib/bgzf.h"
 #include "../htslib/faidx.h"
