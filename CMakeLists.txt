@@ -245,8 +245,9 @@ set(
         "${CMAKE_CURRENT_SOURCE_DIR}/vcf.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/vcf_sweep.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/vcfutils.c"
-
+        "${CMAKE_CURRENT_SOURCE_DIR}/ssize_t_typedef.h"
 )
+
 set(
         HEADER_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.h"
