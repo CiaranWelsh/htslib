@@ -29,8 +29,13 @@ DEALINGS IN THE SOFTWARE.  */
 #include <string.h>
 #include <errno.h>
 
-#include <dirent.h>
+#ifdef _WIN32
+#include "dirent.h"
+#include "dlfcn.h"
+#else
 #include <dlfcn.h>
+#include <dirent.h>
+#endif
 
 #include "hts_internal.h"
 #include "htslib/kstring.h"
