@@ -90,12 +90,12 @@ struct hFILE_backend {
 
 /* May be called by hopen_*() functions to decode a fopen()-style mode into
    open(2)-style flags.  */
-int hfile_oflags(const char *mode);
+HTSLIB_EXPORT int hfile_oflags(const char *mode);
 
 /* Must be called by hopen_*() functions to allocate the hFILE struct and set
    up its base.  Capacity is a suggested buffer size (e.g., via fstat(2))
    or 0 for a default-sized buffer.  */
-hFILE *hfile_init(size_t struct_size, const char *mode, size_t capacity);
+HTSLIB_EXPORT hFILE *hfile_init(size_t struct_size, const char *mode, size_t capacity);
 
 /* Alternative to hfile_init() for in-memory backends for which the base
    buffer is the only storage.  Buffer is already allocated via malloc(2)
@@ -107,7 +107,7 @@ hFILE *hfile_init_fixed(size_t struct_size, const char *mode,
 /* May be called by hopen_*() functions to undo the effects of hfile_init()
    in the event opening the stream subsequently fails.  (This is safe to use
    even if fp is NULL.  This takes care to preserve errno.)  */
-void hfile_destroy(hFILE *fp);
+HTSLIB_EXPORT void hfile_destroy(hFILE *fp);
 
 
 struct hFILE_scheme_handler {
@@ -142,7 +142,7 @@ extern int hfile_always_local (const char *fname);
 extern int hfile_always_remote(const char *fname);
 
 /* Should be called by plugins for each URL scheme they wish to handle.  */
-void hfile_add_scheme_handler(const char *scheme,
+HTSLIB_EXPORT void hfile_add_scheme_handler(const char *scheme,
                               const struct hFILE_scheme_handler *handler);
 
 struct hFILE_plugin {
