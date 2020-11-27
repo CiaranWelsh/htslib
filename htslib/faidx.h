@@ -209,7 +209,7 @@ char *fai_fetchqual64(const faidx_t *fai, const char *reg, hts_pos_t *len);
 /** @param  fai  Pointer to the faidx_t struct
     @return      The number of sequences
 */
-HTS_EXPORT HTS_DEPRECATED//("Please use faidx_nseq instead")
+HTS_EXPORT //HTS_DEPRECATED//("Please use faidx_nseq instead")
 int faidx_fetch_nseq(const faidx_t *fai) ;
 
 /// Fetch the sequence in a region

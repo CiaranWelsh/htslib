@@ -31,7 +31,11 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#ifdef _WIN32
+#include "_getopt.h"
+#else
 #include <getopt.h>
+#endif
 #include <time.h>
 
 #include "htslib/kstring.h"

@@ -28,7 +28,11 @@
 
 #include <config.h>
 
+#ifdef _WIN32
+#include "_getopt.h"
+#else
 #include <getopt.h>
+#endif
 #include <stdio.h>
 #include <stdarg.h>
 #include <inttypes.h>

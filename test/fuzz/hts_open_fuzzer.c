@@ -37,6 +37,8 @@ DEALINGS IN THE SOFTWARE.  */
 #include "htslib/sam.h"
 #include "htslib/vcf.h"
 
+
+
 static void hts_close_or_abort(htsFile* file) {
     if (hts_close(file) != 0) {
         abort();

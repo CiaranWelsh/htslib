@@ -38,7 +38,11 @@
 #include "_unistd.h"
 #include <errno.h>
 #include <stdarg.h>
+#ifdef _WIN32
+#include "_getopt.h"
+#else
 #include <getopt.h>
+#endif
 #include <inttypes.h>
 #include "htslib/bgzf.h"
 #include "htslib/hts.h"

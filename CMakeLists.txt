@@ -275,6 +275,8 @@ set(
         "${CMAKE_CURRENT_SOURCE_DIR}/_time.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/dirent.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/dlfcn.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/dlfcn.h"

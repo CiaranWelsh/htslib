@@ -37,7 +37,10 @@ DEALINGS IN THE SOFTWARE.  */
 #ifdef HAVE_STRING
 #include <string.h>
 #endif
-#include <getopt.h>
+#ifdef _WIN32
+#include "_getopt.h"
+#else
+
 #include <sys/types.h>
 #include "_unistd.h"
 

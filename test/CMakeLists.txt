@@ -44,7 +44,8 @@ function(add_test_executable BINARY OUT_VARIABLE ADD_TO_CTEST)
     if (${ADD_TO_CTEST})
         add_test(TARGET ${BINARY})
     endif()
-    target_link_libraries(${BINARY} PRIVATE hts-static m)
+
+    target_link_libraries(${BINARY} PRIVATE hts-static $<$<BOOL:${UNIX}>:m>)
 
     add_dependencies(${BINARY} hts-static)
     set_target_properties(${BINARY} PROPERTIES LINKER_LANGUAGE C)

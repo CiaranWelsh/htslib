@@ -30,7 +30,11 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+#include "_getopt.h"
+#else
 #include <getopt.h>
+#endif
 #include "_unistd.h"
 
 #include "htslib/hfile.h"
