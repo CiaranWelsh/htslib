@@ -1,5 +1,5 @@
 ########################################################
-#   htslib preamble
+#   htslib
 #
 
 cmake_minimum_required(VERSION 3.16)
@@ -422,7 +422,22 @@ target_compile_definitions(hts PUBLIC hts_EXPORTS)
 include(GenerateExportHeader)
 generate_export_header(hts)
 
-install(TARGETS hts hts-static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT htslib)
+install(
+        TARGETS hts hts-static
+        EXPORT HTSConfig
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT htslib
+)
+
+install(
+        EXPORT HTSConfig
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/hts
+        NAMESPACE HTS::
+#        FILE HTSConfig.cmake
+)
+
 install(DIRECTORY htslib DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT htslib)
 install(FILES bgzip.1 htsfile.1 tabix.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 COMPONENT htslib)
 install(FILES faidx.5 sam.5 vcf.5 DESTINATION ${CMAKE_INSTALL_MANDIR}/man5 COMPONENT htslib)
@@ -459,6 +474,10 @@ if (BUILD_TABIX)
     target_link_libraries(tabix PRIVATE hts-static)
     install(TARGETS tabix RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT tabix)
 endif ()
+
+###################################################################################33
+#   Tests
+#
 
 
 if (BUILD_TESTS)
