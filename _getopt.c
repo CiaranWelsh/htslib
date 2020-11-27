@@ -99,7 +99,7 @@ Then the behavior is completely standard.
 GNU application programs can use a third alternative mode in which
 they can distinguish the relative order of options and other arguments.  */
 
-#include "_getopt.h"
+#include "htslib/_getopt.h"
 
 /* For communication from `getopt' to the caller.
 When `getopt' finds an option that takes an argument,

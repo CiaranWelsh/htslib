@@ -514,7 +514,7 @@ void hclose_abruptly(hFILE *fp)
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "_unistd.h"
+#   include "htslib/_unistd.h"
 #endif
 /* For Unix, it doesn't matter whether a file descriptor is a socket.
    However Windows insists on send()/recv() and its own closesocket()

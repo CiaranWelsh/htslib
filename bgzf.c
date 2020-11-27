@@ -32,7 +32,7 @@
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "_unistd.h"
+#   include "htslib/_unistd.h"
 #endif
 #include <assert.h>
 #include <pthread.h>
@@ -59,8 +59,10 @@
 #define BLOCK_HEADER_LENGTH 18
 #define BLOCK_FOOTER_LENGTH 8
 
-#ifdef _WIN32
-#include "_usleep.h"
+#ifdef HAVE_USLEEP_H
+#    include <usleep.h>
+#else
+#    include "htslib/_usleep.h"
 #endif
 
 /* BGZF/GZIP header (specialized from RFC 1952; little endian):

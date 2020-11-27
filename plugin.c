@@ -32,13 +32,17 @@ DEALINGS IN THE SOFTWARE.  */
 #ifdef HAVE_DIRENT_H
 #include "dirent.h"
 #else
-#include <_dirent.h>
+
+#include "htslib/_dirent.h"
+
 #endif
 
 #ifdef HAVE_DLFCN_H
 #include "dlfcn.h"
 #else
-#include <_dlfcn.h>
+
+#include "htslib/_dlfcn.h"
+
 #endif
 
 
@@ -49,8 +53,7 @@ DEALINGS IN THE SOFTWARE.  */
 #define PLUGINPATH ""
 #endif
 
-static DIR *open_nextdir(struct hts_path_itr *itr)
-{
+static DIR *open_nextdir(struct hts_path_itr *itr) {
     DIR *dir;
 
     while (1) {
@@ -71,28 +74,29 @@ static DIR *open_nextdir(struct hts_path_itr *itr)
                     itr->entry.s, strerror(errno));
     }
 
-    if (itr->entry.s[itr->entry.l-1] != '/') kputc('/', &itr->entry);
+    if (itr->entry.s[itr->entry.l - 1] != '/') kputc('/', &itr->entry);
     itr->entry_dir_l = itr->entry.l;
     return dir;
 }
 
 void hts_path_itr_setup(struct hts_path_itr *itr, const char *path,
-        const char *builtin_path, const char *prefix, size_t prefix_len,
-        const char *suffix, size_t suffix_len)
-{
+                        const char *builtin_path, const char *prefix, size_t prefix_len,
+                        const char *suffix, size_t suffix_len) {
     itr->prefix = prefix;
     itr->prefix_len = prefix_len;
 
     if (suffix) itr->suffix = suffix, itr->suffix_len = suffix_len;
     else itr->suffix = PLUGIN_EXT, itr->suffix_len = strlen(PLUGIN_EXT);
 
-    itr->path.l = itr->path.m = 0; itr->path.s = NULL;
-    itr->entry.l = itr->entry.m = 0; itr->entry.s = NULL;
+    itr->path.l = itr->path.m = 0;
+    itr->path.s = NULL;
+    itr->entry.l = itr->entry.m = 0;
+    itr->entry.s = NULL;
 
-    if (! builtin_path) builtin_path = PLUGINPATH;
-    if (! path) {
+    if (!builtin_path) builtin_path = PLUGINPATH;
+    if (!path) {
         path = getenv("HTS_PATH");
-        if (! path) path = "";
+        if (!path) path = "";
     }
 
     while (1) {
@@ -111,8 +115,7 @@ void hts_path_itr_setup(struct hts_path_itr *itr, const char *path,
     itr->dirv = open_nextdir(itr);
 }
 
-const char *hts_path_itr_next(struct hts_path_itr *itr)
-{
+const char *hts_path_itr_next(struct hts_path_itr *itr) {
     while (itr->dirv) {
         struct dirent *e;
         while ((e = readdir((DIR *) itr->dirv)) != NULL) {
@@ -132,8 +135,10 @@ const char *hts_path_itr_next(struct hts_path_itr *itr)
     }
 
     itr->pathdir = NULL;
-    free(itr->path.s); itr->path.s = NULL;
-    free(itr->entry.s); itr->entry.s = NULL;
+    free(itr->path.s);
+    itr->path.s = NULL;
+    free(itr->entry.s);
+    itr->entry.s = NULL;
     return NULL;
 }
 
@@ -142,8 +147,7 @@ const char *hts_path_itr_next(struct hts_path_itr *itr)
 #define RTLD_NOLOAD 0
 #endif
 
-plugin_void_func *load_plugin(void **pluginp, const char *filename, const char *symbol)
-{
+plugin_void_func *load_plugin(void **pluginp, const char *filename, const char *symbol) {
     void *lib = dlopen(filename, RTLD_NOW | RTLD_LOCAL);
     if (lib == NULL) goto error;
 
@@ -156,11 +160,11 @@ plugin_void_func *load_plugin(void **pluginp, const char *filename, const char *
         dlclose(lib);
         lib = libg;
 
-        kstring_t symbolg = { 0, 0, NULL };
+        kstring_t symbolg = {0, 0, NULL};
         kputs(symbol, &symbolg);
         kputc('_', &symbolg);
         const char *slash = strrchr(filename, '/');
-        const char *basename = slash? slash+1 : filename;
+        const char *basename = slash ? slash + 1 : filename;
         kputsn(basename, strcspn(basename, ".-+"), &symbolg);
 
         *(void **) &sym = dlsym(lib, symbolg.s);
@@ -171,7 +175,7 @@ plugin_void_func *load_plugin(void **pluginp, const char *filename, const char *
     *pluginp = lib;
     return sym;
 
-error:
+    error:
     if (hts_verbose >= 4)
         fprintf(stderr, "[W::%s] can't load plugin \"%s\": %s\n",
                 __func__, filename, dlerror());
@@ -179,22 +183,19 @@ error:
     return NULL;
 }
 
-void *plugin_sym(void *plugin, const char *name, const char **errmsg)
-{
+void *plugin_sym(void *plugin, const char *name, const char **errmsg) {
     void *sym = dlsym(plugin, name);
     if (sym == NULL) *errmsg = dlerror();
     return sym;
 }
 
-plugin_void_func *plugin_func(void *plugin, const char *name, const char **errmsg)
-{
+plugin_void_func *plugin_func(void *plugin, const char *name, const char **errmsg) {
     plugin_void_func *sym;
     *(void **) &sym = plugin_sym(plugin, name, errmsg);
     return sym;
 }
 
-void close_plugin(void *plugin)
-{
+void close_plugin(void *plugin) {
     if (dlclose(plugin) != 0) {
         if (hts_verbose >= 4)
             fprintf(stderr, "[W::%s] dlclose() failed: %s\n",

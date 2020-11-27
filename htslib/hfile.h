@@ -30,10 +30,10 @@ DEALINGS IN THE SOFTWARE.  */
 
 #include <sys/types.h>
 
-#ifdef _WIN32
-#   include "_unistd.h"
-#else
+#ifdef HAVE_UNISTD_H
 #   include <unistd.h>
+#else
+#   include "htslib/_unistd.h"
 #endif
 
 #include "hts_export.h"

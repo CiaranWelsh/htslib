@@ -48,7 +48,7 @@
 #ifdef SHARED
 #define DLFCN_WIN32_EXPORTS
 #endif
-#include "_dlfcn.h"
+#include "htslib/_dlfcn.h"
 
 /* Note:
  * MSDN says these functions are not thread-safe. We make no efforts to have

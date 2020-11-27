@@ -32,10 +32,10 @@ DEALINGS IN THE SOFTWARE.  */
 #include <inttypes.h>
 #include <errno.h>
 #include <limits.h>
-#ifdef _WIN32
-#   include "_unistd.h"
-#else
+#ifdef HAVE_UNISTD_H
 #   include <unistd.h>
+#else
+#   include "htslib/_unistd.h"
 #endif
 #include <assert.h>
 

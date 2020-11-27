@@ -1,4 +1,4 @@
-#include "_time.h"
+#include "htslib/_time.h"
  
 int gettimeofday(struct timeval* t,void* timezone)
 {       struct _timeb timebuffer;

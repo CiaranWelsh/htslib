@@ -43,7 +43,7 @@ DEALINGS IN THE SOFTWARE.  */
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "_unistd.h"
+#   include "htslib/_unistd.h"
 #endif
 // Suppress deprecation message for cigar_tab, which we initialise
 #include "hts_export.h"
@@ -70,8 +70,10 @@ KHASH_DECLARE(s2i, kh_cstr_t, int64_t)
 #define EOVERFLOW ERANGE
 #endif
 
-#ifdef _WIN32
-#include "_usleep.h"
+#ifdef HAVE_USLEEP_H
+#    include <usleep.h>
+#else
+#    include "htslib/_usleep.h"
 #endif
 
 /**********************

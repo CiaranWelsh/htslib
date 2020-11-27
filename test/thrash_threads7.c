@@ -36,12 +36,12 @@ DEALINGS IN THE SOFTWARE.
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "_unistd.h"
+#   include "htslib/_unistd.h"
 #endif
 #ifdef HAVE_SYS_TIME_H
 #   include <sys/time.h>
 #else
-#   include "_time.h"
+#   include "htslib/_time.h"
 #endif
 
 #endif

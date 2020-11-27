@@ -49,7 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "_unistd.h"
+#   include "htslib/_unistd.h"
 #endif
 #include <zlib.h>
 #ifdef HAVE_LIBBZ2
@@ -66,7 +66,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "_unistd.h"
+#   include "htslib/_unistd.h"
 #endif
 
 #include <sys/stat.h>
@@ -95,8 +95,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RP(...)
 #endif
 
-#ifdef _WIN32
-#include "_usleep.h"
+#ifdef HAVE_USLEEP_H
+#    include <usleep.h>
+#else
+#    include "htslib/_usleep.h"
 #endif
 
 #include "../htslib/hfile.h"

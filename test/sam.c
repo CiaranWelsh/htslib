@@ -35,7 +35,7 @@ DEALINGS IN THE SOFTWARE.  */
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "_unistd.h"
+#   include "htslib/_unistd.h"
 #endif
 
 // Suppress message for faidx_fetch_nseq(), which we're intentionally testing

@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "_unistd.h"
+#   include "htslib/_unistd.h"
 #endif
 #include <stdlib.h>
 
