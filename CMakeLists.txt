@@ -1,5 +1,5 @@
 ########################################################
-#   htslib preamble
+#   htslib
 #
 
 cmake_minimum_required(VERSION 3.16)
@@ -35,12 +35,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 # archives
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
-if(MSVC)
+if (MSVC)
     # get rid of warning:
     #   LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs;
     #       use /NODEFAULTLIB:library
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" "/NODEFAULTLIB")
-endif()
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" "/NODEFAULTLIB")
+endif ()
 
 ########################################################
 #   dependencies
@@ -49,7 +49,7 @@ endif()
 find_package(BZip2 REQUIRED)
 find_package(LibLZMA REQUIRED)
 find_package(ZLIB REQUIRED)
-find_package(CURL  REQUIRED)
+find_package(CURL REQUIRED)
 
 # This was akward. Installed on vcpkg then went to
 # D:\vcpkg\installed\x64-windows-static\share\pthread
@@ -283,7 +283,7 @@ set(
         # todo check whether these sources are needed by htslib
         "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/plugin.c"
-#        "${CMAKE_CURRENT_SOURCE_DIR}/tabix.c" # has main
+        #        "${CMAKE_CURRENT_SOURCE_DIR}/tabix.c" # has main
         "${CMAKE_CURRENT_SOURCE_DIR}/textutils.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/bgzf.c"
 )
@@ -393,7 +393,22 @@ target_compile_definitions(hts PUBLIC hts_EXPORTS)
 include(GenerateExportHeader)
 generate_export_header(hts)
 
-install(TARGETS hts hts-static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT htslib)
+install(
+        TARGETS hts hts-static
+        EXPORT HTSConfig
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT htslib
+)
+
+install(
+        EXPORT HTSConfig
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/hts
+        NAMESPACE HTS::
+#        FILE HTSConfig.cmake
+)
+
 install(DIRECTORY htslib DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT htslib)
 install(FILES bgzip.1 htsfile.1 tabix.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 COMPONENT htslib)
 install(FILES faidx.5 sam.5 vcf.5 DESTINATION ${CMAKE_INSTALL_MANDIR}/man5 COMPONENT htslib)
@@ -430,6 +445,10 @@ if (BUILD_TABIX)
     target_link_libraries(tabix PRIVATE hts-static)
     install(TARGETS tabix DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT tabix)
 endif ()
+
+###################################################################################33
+#   Tests
+#
 
 
 if (BUILD_TESTS)
