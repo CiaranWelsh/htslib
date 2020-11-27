@@ -32,6 +32,7 @@
 
 #include <stdint.h>
 #include <sys/types.h>
+#include "config.h"
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else

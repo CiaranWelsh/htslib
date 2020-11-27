@@ -58,6 +58,7 @@ find_package(CURL REQUIRED)
 if (WIN32)
     find_package(pthreads CONFIG REQUIRED)
 else()
+    # on linux this works fine but doesn't work on windows
     find_package(Threads REQUIRED)
 
 endif ()
@@ -306,16 +307,16 @@ set(
 if (WIN32)
     set(
             SOURCE_FILES ${SOURCE_FILES}
-            "${CMAKE_CURRENT_SOURCE_DIR}/_unistd.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_time.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_unistd.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_time.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_usleep.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_getopt.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_dirent.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_dlfcn.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/_time.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_dirent.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/_dlfcn.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_dlfcn.h"
     )
 endif ()
 set(
@@ -439,6 +440,17 @@ install(
 )
 
 install(DIRECTORY htslib DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT htslib)
+install(
+        FILES
+            "${CMAKE_CURRENT_BINARY_DIR}/hts_export.h"
+            "${CMAKE_CURRENT_BINARY_DIR}/version.h"
+            "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+        DESTINATION
+            ${CMAKE_INSTALL_INCLUDEDIR}/htslib
+        COMPONENT
+            htslib
+)
+
 install(FILES bgzip.1 htsfile.1 tabix.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 COMPONENT htslib)
 install(FILES faidx.5 sam.5 vcf.5 DESTINATION ${CMAKE_INSTALL_MANDIR}/man5 COMPONENT htslib)
 install(FILES htslib-s3-plugin.7 DESTINATION ${CMAKE_INSTALL_MANDIR}/man7 COMPONENT htslib)

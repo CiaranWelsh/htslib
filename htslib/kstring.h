@@ -27,6 +27,7 @@
 #ifndef KSTRING_H
 #define KSTRING_H
 
+#include "config.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
