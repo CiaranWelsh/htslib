@@ -137,7 +137,7 @@
 #cmakedefine HAVE_UNISTD_H
 
 // indicator for presence of time.h
-#cmakedefine HAVE_TIME_H
+#cmakedefine HAVE_SYS_TIME_H
 
 // indicator for presence of getopt.h
 #cmakedefine HAVE_GETOPT_H

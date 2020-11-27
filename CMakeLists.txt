@@ -207,8 +207,8 @@ check_include_file(math.h STDC_HEADERS)
 # _WIN32 is also defined on WSL. */
 check_include_file(unistd.h HAVE_UNISTD_H)
 
-# check to see if we have time.h
-check_include_file(time.h HAVE_TIME_H)
+# check to see if we have sys/time.h
+check_include_file(sys/time.h HAVE_SYS_TIME_H)
 
 # check to see if we have getopt
 check_include_file(getopt.h HAVE_GETOPT_H)
@@ -374,6 +374,7 @@ target_include_directories(hts-static PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cram>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
         $<BUILD_INTERFACE:${HTS_INCLUDE_DIR}>
+        $<INSTALL_INTERFACE:include> #relative to install tree
         )
 
 set(LINK_TARGETS)
