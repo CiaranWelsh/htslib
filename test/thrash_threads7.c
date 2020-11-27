@@ -38,7 +38,7 @@ DEALINGS IN THE SOFTWARE.
 #else
 #   include "_unistd.h"
 #endif
-#ifdef HAVE_TIME_H
+#ifdef HAVE_SYS_TIME_H
 #   include <sys/time.h>
 #else
 #   include "_time.h"
