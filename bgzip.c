@@ -35,7 +35,11 @@
 #endif
 #include <stdio.h>
 #include <fcntl.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 #include <errno.h>
 #include <stdarg.h>
 #ifdef _WIN32

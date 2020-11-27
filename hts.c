@@ -36,7 +36,11 @@ DEALINGS IN THE SOFTWARE.  */
 #include <string.h>
 #endif
 #include <stdlib.h>
-#include "_unistd.h"
+#ifdef _WIN32
+#   include "_unistd.h"
+#else
+#   include <unistd.h>
+#endif
 #include <inttypes.h>
 #include <limits.h>
 #include <stdint.h>

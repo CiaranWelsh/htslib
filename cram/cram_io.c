@@ -46,7 +46,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 #include <zlib.h>
 #ifdef HAVE_LIBBZ2
 #include <bzlib.h>
@@ -59,7 +63,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #endif
 #include <sys/types.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 
 #include <sys/stat.h>
 #include <math.h>

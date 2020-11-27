@@ -26,15 +26,12 @@ DEALINGS IN THE SOFTWARE.  */
 #include <config.h>
 #endif
 
-#ifdef WIN32
-#   include "_time.h"
+#ifdef HAVE_TIME_H
+#   include <sys/time.h>
 #else
-#ifdef WIN32
 #   include "_time.h"
-#else
-#include <sys/time.h>
 #endif
-#endif
+
 
 #include <stdlib.h>
 #include <inttypes.h>
@@ -44,7 +41,11 @@ DEALINGS IN THE SOFTWARE.  */
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 #include <limits.h>
 
 #include "thread_pool_internal.h"

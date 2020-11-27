@@ -202,7 +202,8 @@ enum htsExactFormat {
     binary_format, text_format,
     sam, bam, bai, cram, crai, vcf, bcf, csi, gzi, tbi, bed,
     htsget,
-    json HTS_DEPRECATED_ENUM("Use htsExactFormat 'htsget' instead") = htsget,
+    //json  HTS_DEPRECATED_ENUM("Use htsExactFormat 'htsget' instead")
+    json  = htsget,
     empty_format,  // File is empty (or empty after decompression)
     fasta_format, fastq_format, fai_format, fqi_format,
     hts_crypt4gh_format,

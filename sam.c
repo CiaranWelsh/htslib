@@ -40,8 +40,11 @@ DEALINGS IN THE SOFTWARE.  */
 #include <assert.h>
 #include <signal.h>
 #include <inttypes.h>
-#include "_unistd.h"
-
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 // Suppress deprecation message for cigar_tab, which we initialise
 #include "hts_export.h"
 

@@ -32,8 +32,11 @@
 
 #include <stdint.h>
 #include <sys/types.h>
-#include "_unistd.h"
-
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 
 #include "hts_export.h"
 

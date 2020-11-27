@@ -29,11 +29,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 #include <assert.h>
 #include <pthread.h>
 #include <sys/types.h>
-#include "_unistd.h"
 
 #include <inttypes.h>
 #include <zlib.h>

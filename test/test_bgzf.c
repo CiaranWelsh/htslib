@@ -30,12 +30,20 @@ DEALINGS IN THE SOFTWARE.
 #include <string.h>
 #include <errno.h>
 #include <sys/types.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 
 #include <sys/stat.h>
 #include <inttypes.h>
 #include <fcntl.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 
 #include "htslib/bgzf.h"
 #include "htslib/hfile.h"

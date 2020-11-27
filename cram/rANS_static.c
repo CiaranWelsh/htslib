@@ -35,18 +35,22 @@
  * Author: James Bonfield, Wellcome Trust Sanger Institute. 2014
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 #include <assert.h>
 #include <string.h>
-#ifdef WIN32
-#   include "_time.h"
+#ifdef HAVE_TIME_H
+#   include <sys/time.h>
 #else
-#include <sys/time.h>
+#   include "_time.h"
 #endif
 #include <limits.h>
 

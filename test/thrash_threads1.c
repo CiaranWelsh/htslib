@@ -26,7 +26,11 @@ DEALINGS IN THE SOFTWARE.
 #include <config.h>
 
 #include <stdio.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 #include <stdlib.h>
 
 #include "htslib/bgzf.h"

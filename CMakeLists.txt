@@ -35,12 +35,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 # archives
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
-if(MSVC)
+if (MSVC)
     # get rid of warning:
     #   LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs;
     #       use /NODEFAULTLIB:library
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" "/NODEFAULTLIB")
-endif()
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" "/NODEFAULTLIB")
+endif ()
 
 ########################################################
 #   dependencies
@@ -49,14 +49,18 @@ endif()
 find_package(BZip2 REQUIRED)
 find_package(LibLZMA REQUIRED)
 find_package(ZLIB REQUIRED)
-find_package(CURL  REQUIRED)
+find_package(CURL REQUIRED)
 
 # This was akward. Installed on vcpkg then went to
 # D:\vcpkg\installed\x64-windows-static\share\pthread
 # to figure out what variables pthreads imports.
 # Looks like PThreads4W_LIBRARY_RELEASE holds our release library
-find_package(pthreads CONFIG REQUIRED)
+if (WIN32)
+    find_package(pthreads CONFIG REQUIRED)
+else()
+    find_package(Threads REQUIRED)
 
+endif ()
 # note, it seems that on windows and linux, openssl is a requirement for HMAC
 # while on apple we instead need common crypto
 find_package(OpenSSL)
@@ -199,6 +203,29 @@ set(PLUGIN_EXT ${CMAKE_SHARED_LIBRARY_SUFFIX})
 #/* Define to 1 if you have the ANSI C header files. */
 check_include_file(math.h STDC_HEADERS)
 
+#/* Define to 1 if you have the unistd. This way is preferable to #ifdef _WIN32 because
+# _WIN32 is also defined on WSL. */
+check_include_file(unistd.h HAVE_UNISTD_H)
+
+# check to see if we have time.h
+check_include_file(time.h HAVE_TIME_H)
+
+# check to see if we have getopt
+check_include_file(getopt.h HAVE_GETOPT_H)
+
+# check to see if we have usleep
+check_include_file(usleep.h HAVE_USLEEP_H)
+
+# on linux we have include strings while windows its string (no 's')
+check_include_file(string.h HAVE_STRING)
+check_include_file(strings.h HAVE_STRINGS)
+
+# Check whether we have dirent.h
+check_include_file(dirent.h HAVE_DIRENT_H)
+
+# Check whether we have dlfcn.h
+check_include_file(dlfcn.h HAVE_DLFCN_H)
+
 #
 #/* Enable large inode numbers on Mac OS X 10.5.  */
 ##ifndef _DARWIN_USE_64_BIT_INODE
@@ -219,9 +246,7 @@ set(_XOPEN_SOURCE)
 # check to see if ssize_t exists. On linux yes, windows no.
 check_type_size(ssize_t SSIZE_T LANGUAGE C)
 
-# on linux we have include strings while windows its string (no 's')
-check_include_file(string.h HAVE_STRING)
-check_include_file(strings.h HAVE_STRINGS)
+
 
 configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/config.h.in"
@@ -270,24 +295,29 @@ set(
         "${CMAKE_CURRENT_SOURCE_DIR}/vcf.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/vcf_sweep.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/vcfutils.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/_unistd.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/_time.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/_time.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/dirent.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/dlfcn.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/dlfcn.h"
+
         # todo check whether these sources are needed by htslib
         "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/plugin.c"
-#        "${CMAKE_CURRENT_SOURCE_DIR}/tabix.c" # has main
+        #        "${CMAKE_CURRENT_SOURCE_DIR}/tabix.c" # has main
         "${CMAKE_CURRENT_SOURCE_DIR}/textutils.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/bgzf.c"
 )
-
+if (WIN32)
+    set(
+            SOURCE_FILES ${SOURCE_FILES}
+            "${CMAKE_CURRENT_SOURCE_DIR}/_unistd.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_time.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_time.c"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.c"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.c"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_dirent.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_dlfcn.c"
+            "${CMAKE_CURRENT_SOURCE_DIR}/_dlfcn.h"
+    )
+endif ()
 set(
         HEADER_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.h"
@@ -371,7 +401,6 @@ if ("${PThreads4W_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} $<IF:$<CONFIG:Debug>,${PThreads4W_LIBRARY_DEBUG},${PThreads4W_LIBRARY_RELEASE}>)
     set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${PThreads4W_INCLUDE_DIR}")
 endif ()
-
 set(
         INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES}
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
@@ -414,21 +443,21 @@ if (BUILD_BGZIP)
     add_executable(bgzip ${BGZIP_SOURCES})
     target_include_directories(bgzip PRIVATE $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
     target_link_libraries(bgzip PRIVATE hts-static)
-    install(TARGETS bgzip DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bgzip)
+    install(TARGETS bgzip RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bgzip)
 endif ()
 
 if (BUILD_HTSFILE)
     add_executable(htsfile ${HTSFILE_SOURCES})
     target_include_directories(htsfile PRIVATE $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
     target_link_libraries(htsfile PRIVATE hts-static)
-    install(TARGETS htsfile DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT htsfile)
+    install(TARGETS htsfile RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT htsfile)
 endif ()
 
 if (BUILD_TABIX)
     add_executable(tabix ${TABIX_SOURCES})
     target_include_directories(tabix PRIVATE $<TARGET_PROPERTY:hts-static,INCLUDE_DIRECTORIES>)
     target_link_libraries(tabix PRIVATE hts-static)
-    install(TARGETS tabix DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT tabix)
+    install(TARGETS tabix RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT tabix)
 endif ()
 
 

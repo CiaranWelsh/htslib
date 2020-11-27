@@ -28,7 +28,13 @@ DEALINGS IN THE SOFTWARE.  */
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "_unistd.h"
+
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
+
 #include <string.h>
 #ifdef HAVE_STRINGS
 #include <strings.h>
@@ -37,12 +43,19 @@ DEALINGS IN THE SOFTWARE.  */
 #ifdef HAVE_STRING
 #include <string.h>
 #endif
-#ifdef _WIN32
-#include "_getopt.h"
+
+#ifdef HAVE_GETOPT_H
+#   include <getopt.h>
 #else
+#   include "_getopt.h"
+#endif
 
 #include <sys/types.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 
 #include <sys/stat.h>
 #include <errno.h>

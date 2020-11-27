@@ -29,7 +29,11 @@ DEALINGS IN THE SOFTWARE.  */
 #include <limits.h>
 #include <stdint.h>
 #include <inttypes.h>
-#include "_unistd.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#else
+#   include "_unistd.h"
+#endif
 
 #include "htslib/kstring.h"
 

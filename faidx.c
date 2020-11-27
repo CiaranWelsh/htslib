@@ -32,7 +32,11 @@ DEALINGS IN THE SOFTWARE.  */
 #include <inttypes.h>
 #include <errno.h>
 #include <limits.h>
-#include "_unistd.h"
+#ifdef _WIN32
+#   include "_unistd.h"
+#else
+#   include <unistd.h>
+#endif
 #include <assert.h>
 
 #include "htslib/bgzf.h"

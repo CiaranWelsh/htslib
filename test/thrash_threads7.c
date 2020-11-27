@@ -33,11 +33,17 @@ DEALINGS IN THE SOFTWARE.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "_unistd.h"
-#ifdef WIN32
-#   include "_time.h"
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
 #else
-#include <sys/time.h>
+#   include "_unistd.h"
+#endif
+#ifdef HAVE_TIME_H
+#   include <sys/time.h>
+#else
+#   include "_time.h"
+#endif
+
 #endif
 #include <errno.h>
 

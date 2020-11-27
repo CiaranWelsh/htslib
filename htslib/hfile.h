@@ -29,8 +29,12 @@ DEALINGS IN THE SOFTWARE.  */
 #include <string.h>
 
 #include <sys/types.h>
-#include "_unistd.h"
 
+#ifdef _WIN32
+#   include "_unistd.h"
+#else
+#   include <unistd.h>
+#endif
 
 #include "hts_export.h"
 
