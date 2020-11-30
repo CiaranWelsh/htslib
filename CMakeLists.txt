@@ -179,9 +179,6 @@ check_include_file(sys/stat.h HAVE_SYS_STAT_H)
 #/* Define to 1 if you have the <sys/types.h> header file. */
 check_include_file(sys/types.h HAVE_SYS_TYPES_H)
 
-#/* Define to 1 if you have the <unistd.h> header file. */
-check_include_file(unistd.h HAVE_UNISTD_H)
-
 #/* Define to the address where bug reports for this package should be sent. */
 set(PACKAGE_BUGREPORT)
 
@@ -326,11 +323,12 @@ set(
         "${CMAKE_CURRENT_SOURCE_DIR}/cram/rANS_byte.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/cram/rANS_static.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/cram/string_alloc.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/hfile_s3.c"
 )
 
 set(HTS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/htslib")
 
-set(LINK_TARGETS linux2win)
+set(LINK_TARGETS)
 set(INCLUDE_DIRECTORIES)
 if ("${BZip2_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} BZip2::BZip2)
@@ -368,17 +366,19 @@ set(
 
 
 # make static library
-add_library(hts-static STATIC hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
-target_link_libraries(hts-static PRIVATE ${LINK_TARGETS} )
+add_library(hts-static STATIC ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
+target_link_libraries(hts-static PRIVATE ${LINK_TARGETS} linux2win)
 target_include_directories(hts-static PUBLIC ${INCLUDE_DIRECTORIES})
 target_compile_definitions(hts-static PUBLIC HTS_STATIC_DEFINE)
+add_dependencies(hts-static linux2win)
 
 # shared library
-add_library(hts SHARED hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
+add_library(hts SHARED  ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
 target_include_directories(hts PUBLIC ${INCLUDE_DIRECTORIES})
-target_link_libraries(hts PRIVATE ${LINK_TARGETS})
+target_link_libraries(hts PRIVATE ${LINK_TARGETS} linux2win)
 set_target_properties(hts PROPERTIES SOVERSION ${PROJECT_VERSION})
 target_compile_definitions(hts PUBLIC hts_EXPORTS)
+add_dependencies(hts linux2win)
 
 include(GenerateExportHeader)
 generate_export_header(hts)
