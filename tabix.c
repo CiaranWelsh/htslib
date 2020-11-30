@@ -29,12 +29,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
+#include "linux2win/linux2win_unistd.h"
 #include <string.h>
 #ifdef HAVE_STRINGS
 #include <strings.h>
@@ -51,12 +46,7 @@ DEALINGS IN THE SOFTWARE.  */
 #endif
 
 #include <sys/types.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
+#include "linux2win/linux2win_unistd.h"
 #include <sys/stat.h>
 #include <errno.h>
 #include "htslib/tbx.h"

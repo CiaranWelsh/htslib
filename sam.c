@@ -40,12 +40,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <assert.h>
 #include <signal.h>
 #include <inttypes.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-// Suppress deprecation message for cigar_tab, which we initialise
+#include "linux2win/linux2win_unistd.h"// Suppress deprecation message for cigar_tab, which we initialise
 #include "hts_export.h"
 
 #undef HTS_DEPRECATED
@@ -70,11 +65,7 @@ KHASH_DECLARE(s2i, kh_cstr_t, int64_t)
 #define EOVERFLOW ERANGE
 #endif
 
-#ifdef HAVE_USLEEP_H
-#    include <usleep.h>
-#else
-#    include "htslib/_usleep.h"
-#endif
+#include "linux2win/linux2win_usleep.h"
 
 /**********************
  *** BAM header I/O ***

@@ -29,22 +29,8 @@ DEALINGS IN THE SOFTWARE.  */
 #include <string.h>
 #include <errno.h>
 
-#ifdef HAVE_DIRENT_H
-#include "dirent.h"
-#else
-
-#include "htslib/_dirent.h"
-
-#endif
-
-#ifdef HAVE_DLFCN_H
-#include "dlfcn.h"
-#else
-
-#include "htslib/_dlfcn.h"
-
-#endif
-
+#include "linux2win/linux2win_dirent.h"
+#include "linux2win/linux2win_dlfcn.h"
 
 #include "hts_internal.h"
 #include "htslib/kstring.h"

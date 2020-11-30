@@ -66,20 +66,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
+#include "linux2win/linux2win_unistd.h"
 #include <limits.h>
 #include <errno.h>
 #include <sys/types.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
+#include "linux2win/linux2win_unistd.h"
 #include <sys/stat.h>
 
 #include "os.h"

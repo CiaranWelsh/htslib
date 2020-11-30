@@ -26,13 +26,6 @@ DEALINGS IN THE SOFTWARE.  */
 #include <config.h>
 #endif
 
-#ifdef HAVE_SYS_TIME_H
-#   include <sys/time.h>
-#else
-#   include "htslib/_time.h"
-#endif
-
-
 #include <stdlib.h>
 #include <inttypes.h>
 #include <signal.h>
@@ -41,12 +34,10 @@ DEALINGS IN THE SOFTWARE.  */
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
 #include <limits.h>
+
+#include "linux2win/linux2win_time.h"
+#include "linux2win/linux2win_unistd.h"
 
 #include "thread_pool_internal.h"
 #include "htslib/hts_log.h"

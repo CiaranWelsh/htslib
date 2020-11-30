@@ -46,11 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
+#include "linux2win/linux2win_unistd.h"
 #include <zlib.h>
 #ifdef HAVE_LIBBZ2
 #include <bzlib.h>
@@ -63,12 +59,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #endif
 #include <sys/types.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
+#include "linux2win/linux2win_unistd.h"
 #include <sys/stat.h>
 #include <math.h>
 #include <stdint.h>
@@ -95,11 +86,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RP(...)
 #endif
 
-#ifdef HAVE_USLEEP_H
-#    include <usleep.h>
-#else
-#    include "htslib/_usleep.h"
-#endif
+#include "linux2win/linux2win_usleep.h"
 
 #include "../htslib/hfile.h"
 #include "../htslib/bgzf.h"

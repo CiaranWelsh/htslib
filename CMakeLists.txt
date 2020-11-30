@@ -46,6 +46,8 @@ endif ()
 #   dependencies
 #
 
+add_subdirectory(third_party)
+
 find_package(BZip2 REQUIRED)
 find_package(LibLZMA REQUIRED)
 find_package(ZLIB REQUIRED)
@@ -94,7 +96,7 @@ option(BUILD_TABIX "build the tabix program" OFF)
 #/* Define if you have the Common Crypto library. */
 # need to wait until you do mac before you can figure this one out
 set(HAVE_COMMONCRYPTO OFF)
-#
+
 #/* Define to 1 if you have the `drand48' function. */
 check_symbol_exists(drand48 stdlib.h HAVE_DRAND48)
 
@@ -191,54 +193,26 @@ set(PACKAGE_STRING "${PROJECT_NAME}-${PROJECT_VERSION}")
 
 #/* Define to the one symbol short name of this package. */
 set(PACKAGE_TARNAME)
-#
+
 #/* Define to the home page for this package. */
 set(PACKAGE_URL)
-#
+
 #/* Define to the version of this package. */
 set(PACKAGE_VERSION ${PROJECT_VERSION})
-#
+
 #/* Platform-dependent plugin filename extension. */
 set(PLUGIN_EXT ${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 #/* Define to 1 if you have the ANSI C header files. */
 check_include_file(math.h STDC_HEADERS)
 
-#/* Define to 1 if you have the unistd. This way is preferable to #ifdef _WIN32 because
-# _WIN32 is also defined on WSL. */
-check_include_file(unistd.h HAVE_UNISTD_H)
 
-# check to see if we have sys/time.h
-check_include_file(sys/time.h HAVE_SYS_TIME_H)
-
-# check to see if we have getopt
-check_include_file(getopt.h HAVE_GETOPT_H)
-
-# check to see if we have usleep
-check_include_file(usleep.h HAVE_USLEEP_H)
-
-# on linux we have include strings while windows its string (no 's')
-check_include_file(string.h HAVE_STRING)
-check_include_file(strings.h HAVE_STRINGS)
-
-# Check whether we have dirent.h
-check_include_file(dirent.h HAVE_DIRENT_H)
-
-# Check whether we have dlfcn.h
-check_include_file(dlfcn.h HAVE_DLFCN_H)
-
-#
-#/* Enable large inode numbers on Mac OS X 10.5.  */
-##ifndef _DARWIN_USE_64_BIT_INODE
-## define _DARWIN_USE_64_BIT_INODE 1
-##endif
-#
 #/* Number of bits in a file offset, on hosts where this is settable. */
 set(_FILE_OFFSET_BITS)
-#
+
 #/* Define for large files, on AIX-style hosts. */
 set(_LARGE_FILES)
-#
+
 #/* Needed for PTHREAD_MUTEX_RECURSIVE */
 set(_XOPEN_SOURCE)
 
@@ -304,21 +278,7 @@ set(
         "${CMAKE_CURRENT_SOURCE_DIR}/textutils.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/bgzf.c"
 )
-if (WIN32)
-    set(
-            SOURCE_FILES ${SOURCE_FILES}
-            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_unistd.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_time.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_usleep.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_getopt.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_dirent.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/htslib/_dlfcn.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_time.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_usleep.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_getopt.c"
-            "${CMAKE_CURRENT_SOURCE_DIR}/_dlfcn.c"
-    )
-endif ()
+
 set(
         HEADER_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/bcf_sr_sort.h"
@@ -369,16 +329,8 @@ set(
 )
 
 set(HTS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/htslib")
-add_library(hts-static STATIC hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
-target_include_directories(hts-static PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cram>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<BUILD_INTERFACE:${HTS_INCLUDE_DIR}>
-        $<INSTALL_INTERFACE:include> #relative to install tree
-        )
 
-set(LINK_TARGETS)
+set(LINK_TARGETS linux2win)
 set(INCLUDE_DIRECTORIES)
 if ("${BZip2_FOUND}")
     set(LINK_TARGETS ${LINK_TARGETS} BZip2::BZip2)
@@ -405,19 +357,26 @@ if ("${PThreads4W_FOUND}")
 endif ()
 set(
         INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES}
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cram>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<BUILD_INTERFACE:${HTS_INCLUDE_DIR}>
+        $<INSTALL_INTERFACE:include> #relative to install tree
 )
 
+
+
+
 # make static library
-target_link_libraries(hts-static PUBLIC ${LINK_TARGETS})
+add_library(hts-static STATIC hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
+target_link_libraries(hts-static PRIVATE ${LINK_TARGETS} )
 target_include_directories(hts-static PUBLIC ${INCLUDE_DIRECTORIES})
 target_compile_definitions(hts-static PUBLIC HTS_STATIC_DEFINE)
 
 # shared library
 add_library(hts SHARED hfile_s3.c ${SOURCE_FILES} ${HEADER_FILES} ${CRAM_SOURCE_FILES} ${CRAM_HEADER_FILES})
 target_include_directories(hts PUBLIC ${INCLUDE_DIRECTORIES})
-target_link_libraries(hts PUBLIC ${LINK_TARGETS})
+target_link_libraries(hts PRIVATE ${LINK_TARGETS})
 set_target_properties(hts PROPERTIES SOVERSION ${PROJECT_VERSION})
 target_compile_definitions(hts PUBLIC hts_EXPORTS)
 
@@ -425,7 +384,7 @@ include(GenerateExportHeader)
 generate_export_header(hts)
 
 install(
-        TARGETS hts hts-static
+        TARGETS hts hts-static linux2win
         EXPORT HTSConfig
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

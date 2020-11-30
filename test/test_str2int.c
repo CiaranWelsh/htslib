@@ -29,12 +29,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
+#include "linux2win/linux2win_unistd.h"
 #include "../textutils_internal.h"
 
 // Test hts_str2int() and hts_str2uint() on various values around the

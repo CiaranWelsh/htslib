@@ -33,18 +33,8 @@ DEALINGS IN THE SOFTWARE.
 
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-#ifdef HAVE_SYS_TIME_H
-#   include <sys/time.h>
-#else
-#   include "htslib/_time.h"
-#endif
-
-#endif
+#include "linux2win/linux2win_unistd.h"
+#include "linux2win/linux2win_time.h"#endif
 #include <errno.h>
 
 #include "htslib/thread_pool.h"

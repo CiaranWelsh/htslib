@@ -29,12 +29,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <limits.h>
 #include <stdint.h>
 #include <inttypes.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
+#include "linux2win/linux2win_unistd.h"
 #include "htslib/kstring.h"
 
 static inline void clamp(int64_t *val, int64_t min, int64_t max) {

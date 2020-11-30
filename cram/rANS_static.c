@@ -40,18 +40,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
+#include "linux2win/linux2win_unistd.h"
 #include <assert.h>
 #include <string.h>
-#ifdef HAVE_SYS_TIME_H
-#   include <sys/time.h>
-#else
-#   include "htslib/_time.h"
-#endif
+#include "linux2win/linux2win_time.h"
 #include <limits.h>
 
 #include "rANS_static.h"

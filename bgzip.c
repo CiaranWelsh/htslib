@@ -35,11 +35,7 @@
 #endif
 #include <stdio.h>
 #include <fcntl.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
+#include "linux2win/linux2win_unistd.h"
 #include <errno.h>
 #include <stdarg.h>
 #ifdef _WIN32

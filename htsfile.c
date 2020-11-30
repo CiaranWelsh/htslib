@@ -35,12 +35,7 @@ DEALINGS IN THE SOFTWARE.  */
 #else
 #include <getopt.h>
 #endif
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
+#include "linux2win/linux2win_unistd.h"
 #include "htslib/hfile.h"
 #include "htslib/hts.h"
 #include "htslib/sam.h"

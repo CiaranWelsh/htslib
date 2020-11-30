@@ -38,13 +38,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <stdarg.h>
 #include <stdint.h>
 #include <sys/types.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
-
+#include "linux2win/linux2win_unistd.h"
 #include "hts_export.h"
 
 #include "hts.h"

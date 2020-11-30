@@ -32,13 +32,7 @@ DEALINGS IN THE SOFTWARE.  */
 #include <inttypes.h>
 #include <math.h>
 #include <assert.h>
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-
-// Suppress message for faidx_fetch_nseq(), which we're intentionally testing
+#include "linux2win/linux2win_unistd.h"// Suppress message for faidx_fetch_nseq(), which we're intentionally testing
 #include "hts_export.h"
 
 #undef HTS_DEPRECATED

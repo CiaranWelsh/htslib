@@ -126,30 +126,6 @@
 /* Needed for PTHREAD_MUTEX_RECURSIVE */
 #cmakedefine _XOPEN_SOURCE
 
-/* for port to windows. Added by Ciaran Welsh */
-#cmakedefine SSIZE_T
-
-/* on linux we have include strings while windows its string (no 's') */
-#cmakedefine HAVE_STRING
-#cmakedefine HAVE_STRINGS
-
-// indicator for presence of unistd.h
-#cmakedefine HAVE_UNISTD_H
-
-// indicator for presence of time.h
-#cmakedefine HAVE_SYS_TIME_H
-
-// indicator for presence of getopt.h
-#cmakedefine HAVE_GETOPT_H
-
-// indicator for presence of usleep.h
-#cmakedefine HAVE_USLEEP_H
-
-// indicator for presence of dirent.h
-#cmakedefine HAVE_DIRENT_H
-
-// indicator for presence of dlfcn.h
-#cmakedefine HAVE_DLFCN_H
 
 #ifdef _MSC_VER
 //not #if defined(_WIN32) || defined(_WIN64) because we have strncasecmp in mingw

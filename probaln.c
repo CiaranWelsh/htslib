@@ -277,12 +277,7 @@ int probaln_glocal(const uint8_t *ref, int l_ref, const uint8_t *query, int l_qu
 }
 
 #ifdef PROBALN_MAIN
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#else
-#   include "htslib/_unistd.h"
-#endif
-int main(int argc, char *argv[])
+#include "linux2win/linux2win_unistd.h"int main(int argc, char *argv[])
 {
     uint8_t conv[256], *iqual, *ref, *query;
     probaln_par_t par = { 0.001, 0.1, 10 };
